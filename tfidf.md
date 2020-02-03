@@ -24,15 +24,17 @@ b. how to use a package
 The Document Term Matrix (DTM)
 ==
 
-Consider: what is a text document to a computer?
-What can it do with a sequence of characters?
-What we need is a representation of the document that captures something we want to study, and is easy for the computer to process.
-One such representation is the Bag of Words format. 
-In R we can use a Document Term Matrix.
-In a Document Term Matrix,
-    - each document is represented by a set of tokens and their counts
-    - the order of tokens is not encoded in this representation
-    - the basis of many text processing methods, including document classification and topic modeling
+Consider: what is a text document to a computer?  
+What can it do with a sequence of characters?  
+What we need is a representation of the document that captures something we want to study, and is easy for the computer to process.  
+One such representation is the Bag of Words format.   
+In R we can use a Document Term Matrix.  
+
+
+In a Document Term Matrix:
+  - each document is represented by a set of tokens and their counts  
+  - the order of tokens is not encoded in this representation  
+  - the basis of many text processing methods, including document classification and topic modeling  
 
 a.  Create a 'Corpus' object using the 'tm' package
 The first step is to load the text data into a 'corpus' object.
@@ -42,13 +44,13 @@ The first step is to load the text data into a 'corpus' object.
 
 optional:
 b.  Preprocess the corpus object
-Use the tm_map function to apply a transformation on each element of the corpus object.
+Use the tm_map function to apply a transformation on each element of the corpus object.  
 Alternatively use the tm_parLapply function to do the same in parallel.
 ```
-    corpus = tm_map(corpus, removePunctuation)
-    corpus = tm_map(corpus, removeNumbers)
-    corpus = tm_map(corpus, tolower)
-    corpus = tm_map(corpus, removeWords, stopwords("en")) # may need snowballC package
+    mycorpus = tm_map(corpus, removePunctuation)
+    mycorpus = tm_map(corpus, removeNumbers)
+    mycorpus = tm_map(corpus, tolower)
+    mycorpus = tm_map(corpus, removeWords, stopwords("en")) # may need snowballC package
 ```
 c. Creating a Document Term Matrix from the corpus object    
 From the 'corpus' object we can create a document term matrix.
@@ -58,12 +60,44 @@ From the 'corpus' object we can create a document term matrix.
 ```
 Note: the DocumentTermMatrix automatically sets all the characters to lower case.
 
-d. Sparsity in Document Term Matrices
+d. Exploring with a DTM
+DocumentTermMatrices are stored as Simple Triplet Matrices.
+Simple Triplet Matrices are a way of storing sparse matrices.
+Be aware of this when probing the object.
+```
+   class(mydtm)
+   str(mydtm)
+```
 
-e. Exploring with a DTM
+A useful tool is the inspect function from the 'tm' package.
+```
+   inspect(mydtm)
+```
 
-    
-
+Use the 'slam' package to perform common operations on the DTM in simple triplet matrix form
+```
+   myrowsums = row_sums(mydtm)
+   mycolsums = col_sums(mydtm)
+   myrowmeans = row_means(mydtm)
+   mycolmeans = col_means(mydtm)
+```
+Examples:  
+We want to get rid of all the empty documents from the document term matrix.
+```
+   mydtm = mydtm[row_sums(mydtm) > 0]
+```
+Get rid of duplicates
+```
+   mydtm = unique(mydtm)
+```
+Sort the documents by number of tokens
+```
+   doccounts = order(col_sums(mydtm, decreasing=TRUE)
+```
+Similarly find the most common words
+```
+   wordfreqs = order(row_sums(mydtm, decreasing=TRUE)
+``` 
 TF-IDF
 == 
 
