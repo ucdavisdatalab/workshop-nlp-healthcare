@@ -1,28 +1,24 @@
-NLP Workshop
-===
+# NLP Workshop February 10th 2020
 
-Presentation of the data
-==
+## Presentation of the data
 
 For this workshop, we are looking at a set of abstracts of medical journal articles related to breast cancer.
 We have X abstracts, stored in a csv, with duplicates. 
 We would like to get the key words from each abstract, as well as visualize / check for groupings of abstracts in two dimensions.
 
-The tm package
-==
+## The tm package
 
-a. install + load the 'tm' package
+###### a. install + load the 'tm' package
 ```
     install.packages('tm')
     library('tm')
 ```
-b. how to use a package
+###### b. how to use a package
     reading the online documentation
     following the vignette
     browsing the documention in R (and R studio's pane for doing it)
    
-The Document Term Matrix (DTM)
-==
+## The Document Term Matrix (DTM)
 
 Consider: what is a text document to a computer?  
 What can it do with a sequence of characters?  
@@ -36,14 +32,13 @@ In a Document Term Matrix:
   - the order of tokens is not encoded in this representation  
   - the basis of many text processing methods, including document classification and topic modeling  
 
-a.  Create a 'Corpus' object using the 'tm' package
+###### a.  Create a 'Corpus' object using the 'tm' package
 The first step is to load the text data into a 'corpus' object.
 ```
     mycorpus = Corpus(VectorSource(data$text))
 ```
 
-optional:
-b.  Preprocess the corpus object
+###### b.  Preprocess the corpus object
 Use the tm_map function to apply a transformation on each element of the corpus object.  
 Alternatively use the tm_parLapply function to do the same in parallel.
 ```
@@ -52,7 +47,7 @@ Alternatively use the tm_parLapply function to do the same in parallel.
     mycorpus = tm_map(corpus, tolower)
     mycorpus = tm_map(corpus, removeWords, stopwords("en")) # may need snowballC package
 ```
-c. Creating a Document Term Matrix from the corpus object    
+###### c. Creating a Document Term Matrix from the corpus object    
 From the 'corpus' object we can create a document term matrix.
 ```
     mydtm = DocumentTermMatrix(mycorpus)
@@ -60,10 +55,10 @@ From the 'corpus' object we can create a document term matrix.
 ```
 Note: the DocumentTermMatrix automatically sets all the characters to lower case.
 
-d. Exploring with a DTM
-DocumentTermMatrices are stored as Simple Triplet Matrices.
-Simple Triplet Matrices are a way of storing sparse matrices.
-Be aware of this when probing the object.
+###### d. Exploring with a DTM  
+DocumentTermMatrices are stored as Simple Triplet Matrices.  
+Simple Triplet Matrices are a way of storing sparse matrices.  
+Be aware of this when probing the object.  
 ```
    class(mydtm)
    str(mydtm)
@@ -98,11 +93,8 @@ Similarly find the most common words
 ```
    wordfreqs = order(row_sums(mydtm, decreasing=TRUE)
 ``` 
-TF-IDF
-== 
+## TF-IDF
 
-PCA
-==
+## PCA
 
-Further resources!
-==
+## Further resources!
