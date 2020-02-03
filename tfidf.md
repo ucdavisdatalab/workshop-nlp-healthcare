@@ -10,8 +10,8 @@ We would like to get the key words from each abstract, as well as visualize / ch
 
 ###### a. install + load the 'tm' package
 ```
-    install.packages('tm')
-    library('tm')
+install.packages('tm')
+library('tm')
 ```
 ###### b. how to use a package
     reading the online documentation
@@ -35,23 +35,24 @@ In a Document Term Matrix:
 ###### a.  Create a 'Corpus' object using the 'tm' package
 The first step is to load the text data into a 'corpus' object.
 ```
-    mycorpus = Corpus(VectorSource(data$text))
+mycorpus = Corpus(VectorSource(data$text))
 ```
 
 ###### b.  Preprocess the corpus object
+COMMENT: THIS CAN BE DONE IN THE DTM, THIS MAY BE EASIER TO FOLLOW IN THE WORKSHOP IF WE LIMIT THE AMOUNT OF TIME SPENT ON THE CORPUS
 Use the tm_map function to apply a transformation on each element of the corpus object.  
 Alternatively use the tm_parLapply function to do the same in parallel.
 ```
-    mycorpus = tm_map(corpus, removePunctuation)
-    mycorpus = tm_map(corpus, removeNumbers)
-    mycorpus = tm_map(corpus, tolower)
-    mycorpus = tm_map(corpus, removeWords, stopwords("en")) # may need snowballC package
+mycorpus = tm_map(corpus, removePunctuation)
+mycorpus = tm_map(corpus, removeNumbers)
+mycorpus = tm_map(corpus, tolower)
+mycorpus = tm_map(corpus, removeWords, stopwords("en")) # may need snowballC package
 ```
 ###### c. Creating a Document Term Matrix from the corpus object    
 From the 'corpus' object we can create a document term matrix.
 ```
-    mydtm = DocumentTermMatrix(mycorpus)
-    mydtm # why is this weird?
+mydtm = DocumentTermMatrix(mycorpus)
+mydtm # why is this weird?
 ```
 Note: the DocumentTermMatrix automatically sets all the characters to lower case.
 
@@ -60,40 +61,41 @@ DocumentTermMatrices are stored as Simple Triplet Matrices.
 Simple Triplet Matrices are a way of storing sparse matrices.  
 Be aware of this when probing the object.  
 ```
-   class(mydtm)
-   str(mydtm)
+class(mydtm)
+str(mydtm)
 ```
 
 A useful tool is the inspect function from the 'tm' package.
 ```
-   inspect(mydtm)
+inspect(mydtm)
 ```
 
 Use the 'slam' package to perform common operations on the DTM in simple triplet matrix form
 ```
-   myrowsums = row_sums(mydtm)
-   mycolsums = col_sums(mydtm)
-   myrowmeans = row_means(mydtm)
-   mycolmeans = col_means(mydtm)
+myrowsums = row_sums(mydtm)
+mycolsums = col_sums(mydtm)
+myrowmeans = row_means(mydtm)
+mycolmeans = col_means(mydtm)
 ```
 Examples:  
 We want to get rid of all the empty documents from the document term matrix.
 ```
-   mydtm = mydtm[row_sums(mydtm) > 0]
+mydtm = mydtm[row_sums(mydtm) > 0]
 ```
 Get rid of duplicates
 ```
-   mydtm = unique(mydtm)
+mydtm = unique(mydtm)
 ```
 Sort the documents by number of tokens
 ```
-   doccounts = order(col_sums(mydtm, decreasing=TRUE)
+doccounts = order(col_sums(mydtm, decreasing=TRUE))
 ```
 Similarly find the most common words
 ```
-   wordfreqs = order(row_sums(mydtm, decreasing=TRUE)
+wordfreqs = order(row_sums(mydtm, decreasing=TRUE))
 ``` 
 ## TF-IDF
+
 
 ## PCA
 
