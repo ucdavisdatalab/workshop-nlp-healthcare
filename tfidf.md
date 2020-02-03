@@ -1,15 +1,16 @@
 NLP Workshop
 ===
 
-Pamela - what is nlp, what does it mean for medical research? ...
-
-1. Presentation of the data
+Presentation of the data
+==
 
 For this workshop, we are looking at a set of abstracts of medical journal articles related to breast cancer.
 We have X abstracts, stored in a csv, with duplicates. 
 We would like to get the key words from each abstract, as well as visualize / check for groupings of abstracts in two dimensions.
 
-2. The tm package
+The tm package
+==
+
 a. install + load the 'tm' package
 ```
     install.packages('tm')
@@ -20,7 +21,9 @@ b. how to use a package
     following the vignette
     browsing the documention in R (and R studio's pane for doing it)
    
-3. The Document Term Matrix (DTM)
+The Document Term Matrix (DTM)
+==
+
 Consider: what is a text document to a computer?
 What can it do with a sequence of characters?
 What we need is a representation of the document that captures something we want to study, and is easy for the computer to process.
@@ -61,7 +64,11 @@ e. Exploring with a DTM
 
     
 
-4. TF-IDF
-5. PCA
+TF-IDF
+== 
 
-6. Further resources!
+PCA
+==
+
+Further resources!
+==
