@@ -77,6 +77,13 @@ mycolsums = col_sums(mydtm)
 myrowmeans = row_means(mydtm)
 mycolmeans = col_means(mydtm)
 ```
+
+Alternatively, for small dtms, we can convert to a non sparse matrix format.  
+This may be easier to work with.
+```
+   mydtm = as.matrix(mydtm)
+```
+
 Examples:  
 We want to get rid of all the empty documents from the document term matrix.
 ```
@@ -96,6 +103,26 @@ wordfreqs = order(row_sums(mydtm, decreasing=TRUE))
 ``` 
 ## TF-IDF
 
+Create tf-idf weighted DTM
+```
+   tfidf_dtm = weightTfIdf(mydtm, normalize=TRUE) #discuss normalize
+```
+
+Inspect the new dtm
+```
+   inspect(tfidf_dtm)
+```
+
+Look at results for a single document
+```
+   doc10 = as.matrix(mydtm[, 10])
+```
+
+sort the results
+```
+   doc10_sorted = doc10[sort.list(-doc10[,1])), decreasing=TRUE]
+   doc10_sorted[1:10] 
+```
 
 ## PCA
 
