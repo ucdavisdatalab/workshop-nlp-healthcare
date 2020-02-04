@@ -72,10 +72,10 @@ inspect(mydtm)
 
 Use the 'slam' package to perform common operations on the DTM in simple triplet matrix form
 ```
-myrowsums = row_sums(mydtm)
-mycolsums = col_sums(mydtm)
-myrowmeans = row_means(mydtm)
-mycolmeans = col_means(mydtm)
+myrowsums = rowSums(mydtm)
+mycolsums = colSums(mydtm)
+myrowmeans = rowMeans(mydtm)
+mycolmeans = colMeans(mydtm)
 ```
 
 Alternatively, for small dtms, we can convert to a non sparse matrix format.  
@@ -87,7 +87,7 @@ This may be easier to work with.
 Examples:  
 We want to get rid of all the empty documents from the document term matrix.
 ```
-mydtm = mydtm[row_sums(mydtm) > 0]
+mydtm = mydtm[rowSums(mydtm) > 0]
 ```
 Get rid of duplicates
 ```
@@ -95,11 +95,11 @@ mydtm = unique(mydtm)
 ```
 Sort the documents by number of tokens
 ```
-doccounts = order(col_sums(mydtm, decreasing=TRUE))
+doccounts = order(colSums(mydtm), decreasing=TRUE)
 ```
 Similarly find the most common words
 ```
-wordfreqs = order(row_sums(mydtm, decreasing=TRUE))
+wordfreqs = order(rowSums(mydtm), decreasing=TRUE)
 ``` 
 ## TF-IDF
 
@@ -120,7 +120,7 @@ Look at results for a single document
 
 sort the results
 ```
-   doc10_sorted = doc10[sort.list(-doc10[,1])), decreasing=TRUE]
+   doc10_sorted = doc10[sort.list(-doc10[,1]), decreasing=TRUE]
    doc10_sorted[1:10] 
 ```
 
