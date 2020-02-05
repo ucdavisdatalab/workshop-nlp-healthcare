@@ -1,0 +1,193 @@
+---
+title: NLP Workshop
+author: Dr. Pamela Reynolds, Arthur Koehl, Dr. Wesley Brooks
+date: February 10, 2020
+output:
+   rmdformats::readthedown
+---
+
+download link for Pamela's slides here\
+
+# Objectives for Workshop
+``` {objective}
+1. Introduce Natural Language Processing 
+2. Introduce the 'tm' package in R 
+3. Explain ways of representing documents so they can be analyzed with computational methods
+4. Demonstrate usage of the corpus and DocumentTermMatrix objects
+5. Explain and demonstrate TF-IDF weighting 
+6. Explain PCA and its applications for corpus exploration
+```
+
+# Presentation of the data
+
+For this workshop, we are looking at a set of abstracts of medical journal articles related to breast cancer.
+We have X abstracts, stored in a csv, with duplicates. 
+We would like to get the key words from each abstract, as well as visualize / check for groupings of abstracts in two dimensions.
+
+# The tm package
+
+The 'tm' - text mining - package has methods for mining text with R including importing data, storing corpora, applying operations on corpora (such as common preprocessing methods), and document term matrices.
+
+#### a. install + load the 'tm' package
+```
+install.packages('tm')
+library('tm')
+```
+#### b. package help
+You can find the documentation for the package [online](https://cran.r-project.org/web/packages/tm/tm.pdf)\
+You can also browse the documentation within R or R studio
+```
+?tm:tm
+```
+for a single function
+```
+?TermDocumentMatrix
+```
+
+# The Document Term Matrix 
+
+Consider: \
+what is a text document to a computer?  \
+What can it do with a sequence of characters? \  
+
+In order for us to apply statistical methods on a document, we need a representation of texts that is easy for a computer to process, but still encodes information related to that text's content.
+One such representation is the Bag of Words format.\
+
+Bag of Words is a way of representing a document that encodes a document as a 'bag' of its tokens.
+The document is represented as the words that appeared in the document and the number of times those words appeared.
+All information about word order is lost in this representation, however, for many NLP methods, this is still an effective representation of the content of the document.\
+
+In R we can use a Document Term Matrix.  
+
+In brief, a Document Term Matrix:  
+  - each document is represented by a set of tokens and their counts  
+  - the order of tokens is not encoded in this representation  
+  - the basis of many text processing methods, including document classification and topic modeling  
+
+#### a.  Create a 'Corpus' object using the 'tm' package
+The first step is to load the text data into a 'corpus' object.
+```
+mycorpus = Corpus(VectorSource(data$text))
+```
+
+#### b.  Preprocess the corpus object
+Use the tm_map function to apply a transformation on each element of the corpus object.  
+Alternatively use the tm_parLapply function to do the same in parallel.
+```
+mycorpus = tm_map(corpus, removePunctuation)
+mycorpus = tm_map(corpus, removeNumbers)
+mycorpus = tm_map(corpus, tolower)
+mycorpus = tm_map(corpus, removeWords, stopwords("en")) # may need snowballC package
+```
+#### c. Creating a Document Term Matrix from the corpus object    
+From the 'corpus' object we can create a document term matrix.
+```
+mydtm = DocumentTermMatrix(mycorpus)
+mydtm 
+```
+Note: the DocumentTermMatrix automatically sets all the characters to lower case.
+
+#### d. Exploring with a DTM  
+DocumentTermMatrices are stored as Simple Triplet Matrices.  
+Simple Triplet Matrices are a way of storing sparse matrices.  
+Be aware of this when probing the object.  
+```
+class(mydtm)
+str(mydtm)
+```
+
+A useful tool is the inspect function from the 'tm' package.
+```
+inspect(mydtm)
+```
+
+Use the 'slam' package to perform common operations on the DTM in simple triplet matrix form
+```
+install.packages("slam")
+library(slam)
+myrowsums = row_sums(mydtm)
+mycolsums = col_sums(mydtm)
+myrowmeans = row_means(mydtm)
+mycolmeans = col_means(mydtm)
+```
+
+Alternatively, for small dtms, we can convert to a non sparse matrix format.  
+This may be easier to work with.
+```
+mydtm = as.matrix(mydtm)
+```
+
+Examples:  
+We want to get rid of all the empty documents from the document term matrix.
+```
+mydtm = mydtm[rowSums(mydtm) > 0]
+```
+Get rid of duplicates
+```
+mydtm = unique(mydtm)
+```
+Sort the documents by number of tokens
+```
+doccounts = order(colSums(mydtm, decreasing=TRUE))
+```
+Similarly find the most common words
+```
+wordfreqs = order(rowSums(mydtm, decreasing=TRUE))
+``` 
+# TF-IDF
+
+TF-IDF stands for term frequency-inverse document frequency. 
+It is a VERY popular method for finding documents relevant to a users search term. 
+It can also be used as an effective (often times better than simple bag of words) representation of documents for statistical modeling of documents in a corpus. 
+
+#### a. Intuition behind TF-IDF
+
+TF-IDF combines two attributes that may signal a words importance in a document into a single metric. 
+The first is the 'term frequency (TF)' - how often the word appeared within that document. 
+It makes intuitive sense that if a word appears many times in a document, that the document is about something related to that term.
+The second attribute is the 'inverse document frequency (IDF)' - a measure of what proportion of the documents the word appeared in. If a word appears in all documents, its weight should be reduced. 
+Conversely, if a word appears only in few documents, it should be highly weighted for those documents. 
+
+#### b. TF-IDF formula
+
+```
+tfidf(t,d,D) = tf(t,d) * idf(t,D)
+```
+Where, tf(t,d) is a function of a terms(t) frequency for a given document(d). 
+And, idf(t,D) is the inverse function of a terms(t) appearance across all the documents(D).
+There are many variations of functions for tf(t,d) and idf(t,D) that can be used for computing TF-IDF.
+
+#### c. TF-IDF from DTM
+Create tf-idf weighted DTM in R
+```
+tfidf_dtm = weightTfIdf(mydtm, normalize=TRUE) 
+```
+
+#### d. Looking at the results
+Inspect the new dtm
+```
+inspect(tfidf_dtm)
+```
+
+Look at results for a single document
+```
+doc10 = as.matrix(mydtm[, 10])
+```
+
+sort the results for that document
+```
+doc10_sorted = doc10[sort.list(-doc10[,1])), decreasing=TRUE]
+doc10_sorted[1:10] 
+```
+
+# PCA
+
+#### a. Intuition behind PCA
+
+#### b. Computing PCA 
+
+#### c. Plotting the abstracts
+
+#### d. Clustering
+
+# Further resources 
