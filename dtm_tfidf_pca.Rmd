@@ -44,6 +44,23 @@ for a single function
 ?TermDocumentMatrix
 ```
 
+# Loading Text into R - the corpus object
+
+#### a.  Create a 'Corpus' object using the 'tm' package
+The first step is to load the text data into a 'corpus' object.
+```
+mycorpus = Corpus(VectorSource(data$text))
+```
+
+#### b.  Preprocess the corpus object
+Use the tm_map function to apply a transformation on each element of the corpus object.  
+Alternatively use the tm_parLapply function to do the same in parallel.
+```
+mycorpus = tm_map(corpus, removePunctuation)
+mycorpus = tm_map(corpus, removeNumbers)
+mycorpus = tm_map(corpus, tolower)
+mycorpus = tm_map(corpus, removeWords, stopwords("en")) # may need snowballC package
+```
 # The Document Term Matrix 
 
 Consider: \
@@ -64,22 +81,7 @@ In brief, a Document Term Matrix:
   - the order of tokens is not encoded in this representation  
   - the basis of many text processing methods, including document classification and topic modeling  
 
-#### a.  Create a 'Corpus' object using the 'tm' package
-The first step is to load the text data into a 'corpus' object.
-```
-mycorpus = Corpus(VectorSource(data$text))
-```
-
-#### b.  Preprocess the corpus object
-Use the tm_map function to apply a transformation on each element of the corpus object.  
-Alternatively use the tm_parLapply function to do the same in parallel.
-```
-mycorpus = tm_map(corpus, removePunctuation)
-mycorpus = tm_map(corpus, removeNumbers)
-mycorpus = tm_map(corpus, tolower)
-mycorpus = tm_map(corpus, removeWords, stopwords("en")) # may need snowballC package
-```
-#### c. Creating a Document Term Matrix from the corpus object    
+#### a. Creating a Document Term Matrix from the corpus object    
 From the 'corpus' object we can create a document term matrix.
 ```
 mydtm = DocumentTermMatrix(mycorpus)
@@ -87,7 +89,7 @@ mydtm
 ```
 Note: the DocumentTermMatrix automatically sets all the characters to lower case.
 
-#### d. Exploring with a DTM  
+#### b. Exploring with a DTM  
 DocumentTermMatrices are stored as Simple Triplet Matrices.  
 Simple Triplet Matrices are a way of storing sparse matrices.  
 Be aware of this when probing the object.  
