@@ -8,6 +8,9 @@ output:
 
 download link for Pamela's slides here\
 
+download data here:\
+[abstracts-datafied.csv](/abstracts-datafied.csv)
+
 # Objectives for Workshop
 ``` {objective}
 1. Introduce Natural Language Processing 
@@ -29,8 +32,8 @@ We would like to get the key words from each abstract, as well as visualize / ch
 The 'tm' - text mining - package has methods for mining text with R including importing data, storing corpora, applying operations on corpora (such as common preprocessing methods), and document term matrices.
 
 #### a. install + load the 'tm' package
-```
-install.packages(c('tm', 'readr', 'pcaMethods'))
+```{r}
+#install.packages(c('tm', 'readr', 'pcaMethods'))
 library('tm')
 library('readr')
 library('pcaMethods')
@@ -46,7 +49,7 @@ Within R/RStudio you can browse function documentation
 
 #### a.  Create a 'Corpus' object using the 'tm' package
 The first step is to load the text data into a 'corpus' object.
-```
+```{r}
 data <- read_csv("data/abstracts-datafied.csv")
 mycorpus = Corpus(VectorSource(data$text))
 ```
@@ -54,7 +57,7 @@ mycorpus = Corpus(VectorSource(data$text))
 #### b.  Preprocess the corpus object
 Use the tm_map function to apply a transformation on each element of the corpus object.  
 Alternatively use the tm_parLapply function to do the same in parallel.
-```
+```{r}
 mycorpus = tm_map(mycorpus, removePunctuation)
 mycorpus = tm_map(mycorpus, removeNumbers)
 mycorpus = tm_map(mycorpus, tolower)
@@ -82,7 +85,7 @@ In brief, a Document Term Matrix:
 
 #### a. Creating a Document Term Matrix from the corpus object    
 From the 'corpus' object we can create a document term matrix.
-```
+```{r}
 mydtm = DocumentTermMatrix(mycorpus)
 mydtm 
 ```
@@ -92,19 +95,19 @@ Note: the DocumentTermMatrix automatically sets all the characters to lower case
 DocumentTermMatrices are stored as Simple Triplet Matrices.  
 Simple Triplet Matrices are a way of storing sparse matrices.  
 Be aware of this when probing the object.  
-```
+```{r}
 class(mydtm)
 str(mydtm)
 ```
 
 A useful tool is the inspect function from the 'tm' package.
-```
+```{r}
 inspect(mydtm)
 ```
 
 Use the 'slam' package to perform common operations on the DTM in simple triplet matrix form
-```
-install.packages("slam")
+```{r}
+#install.packages("slam")
 library(slam)
 myrowsums = row_sums(mydtm)
 mycolsums = col_sums(mydtm)
@@ -114,26 +117,26 @@ mycolmeans = col_means(mydtm)
 
 For small dtms, as is the case with our workshop data, we can convert to a non sparse matrix format.  
 This may be easier to work with.
-```
+```{r}
 mydtm_mat = as.matrix(mydtm)
 ```
 
 Examples:  
 We want to get rid of all the empty documents from the document term matrix.
-```
+```{r}
 mydtm = mydtm[rowSums(mydtm_mat) > 0,]
 ```
 Get rid of duplicates
-```
+```{r}
 mydtm = unique(mydtm)
 ```
 Sort the documents by number of tokens
-```
+```{r}
 doccounts = order(rowSums(mydtm_mat), decreasing=TRUE)
 ```
 Similarly find the most common words
-```
-wordfreqs = order(cowSums(mydtm_mat), decreasing=TRUE)
+```{r}
+wordfreqs = order(colSums(mydtm_mat), decreasing=TRUE)
 ``` 
 # TF-IDF
 
@@ -160,24 +163,24 @@ There are many variations of functions for tf(t,d) and idf(t,D) that can be used
 
 #### c. TF-IDF from DTM
 Create tf-idf weighted DTM in R
-```
+```{r}
 tfidf_dtm = weightTfIdf(mydtm, normalize=TRUE) 
 ```
 
 #### d. Looking at the results
 Inspect the new dtm
-```
+```{r}
 inspect(tfidf_dtm)
 ```
 
 Look at results for a single document
-```
-doc10 = as.matrix(mydtm[, 10])
+```{r}
+doc10 = as.matrix(mydtm[10,])
 ```
 
 sort the results for that document
-```
-doc10_sorted = doc10[sort.list(-doc10[,1])), decreasing=TRUE]
+```{r}
+doc10_sorted = doc10[sort.list(-doc10[,1]), decreasing=TRUE]
 doc10_sorted[1:10] 
 ```
 
