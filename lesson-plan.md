@@ -8,11 +8,11 @@ We would like to get the key words from each abstract, as well as visualize / ch
 
 ## The tm package
 
-###### a. install + load the 'tm' and 'dplyr' packages.
+###### a. install + load the 'tm' and 'readr' packages.
 ```
-install.packages(c('tm', 'dplyr'))
+install.packages(c('tm', 'readr'))
 library('tm')
-library('dplyr')
+library('readr')
 ```
 ###### b. how to use a package
     reading the online documentation
