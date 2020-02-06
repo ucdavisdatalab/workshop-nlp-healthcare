@@ -8,10 +8,11 @@ We would like to get the key words from each abstract, as well as visualize / ch
 
 ## The tm package
 
-###### a. install + load the 'tm' package
+###### a. install + load the 'tm' and 'dplyr' packages.
 ```
-install.packages('tm')
+install.packages(c('tm', 'dplyr'))
 library('tm')
+library('dplyr')
 ```
 ###### b. how to use a package
     reading the online documentation
@@ -35,6 +36,7 @@ In a Document Term Matrix:
 ###### a.  Create a 'Corpus' object using the 'tm' package
 The first step is to load the text data into a 'corpus' object.
 ```
+data <- read_csv("data/abstracts-datafied.csv", col_names=TRUE)
 mycorpus = Corpus(VectorSource(data$text))
 ```
 
