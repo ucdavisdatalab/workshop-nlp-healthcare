@@ -30,8 +30,9 @@ The 'tm' - text mining - package has methods for mining text with R including im
 
 #### a. install + load the 'tm' package
 ```
-install.packages('tm')
+install.packages(c('tm', 'readr'))
 library('tm')
+library('readr')
 ```
 #### b. package help
 You can find the documentation for the package [online](https://cran.r-project.org/web/packages/tm/tm.pdf)\
@@ -45,6 +46,7 @@ Within R/RStudio you can browse function documentation
 #### a.  Create a 'Corpus' object using the 'tm' package
 The first step is to load the text data into a 'corpus' object.
 ```
+data <- read_csv("data/abstracts-datafied.csv")
 mycorpus = Corpus(VectorSource(data$text))
 ```
 
