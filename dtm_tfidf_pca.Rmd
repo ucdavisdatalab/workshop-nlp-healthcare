@@ -188,18 +188,46 @@ doc10_sorted[1:10]
 
 #### a. Intuition behind PCA
 
+Think of looking up at the night sky. You might see something like this:
+![Milky Way galaxy as seen from Earth](img/milky-way-1.jpg)
+
+You can clearly see that the Milky Way has a major axis and a minor axis. But we know that our galaxy has a spiral shape - we just can't see it because we're looking from a particular perspective. If you took the coordinates of all the stars in our galaxy, you could rotate those cordinates to get an image like this:
+![Milky Way galaxy as seen from "above"](img/milky-way-above.jpg)
+
+This is analogous to principal components analysis (PCA). PCA rotates the data points to get a better perspective. The new cordinates are aligned by PCA so that the direction with the gratest variability comes first, then the  next most, and so on. The analogy is that our perspective from Earth shows one axis of the Milky Way with a lot of variability, and one with only a little. PCA would rotate that view so the first two "principal components" show the galaxy's spiral shape, with the third (showing its thickness being last).
+
 #### b. Computing PCA 
 
 ```{r}
-mypca <- prcomp(t(tfidf_dtm), center=TRUE, scale=TRUE)
+mypca <- prcomp(t(tfidf_dtm), center=TRUE, scale.=TRUE)
+mypca2 <- prcomp(tfidf_dtm, center=TRUE, scale.=TRUE)
 ```
 
 #### c. Plotting the abstracts
 
+Add the principal components to the original data:
+
 ```{r}
-plot(mypca$rotation[, 1:2])
+plotdata <- cbind(data, mypca$rotation)
 ```
 
+
+```{r}
+ggplot(plotdata) + aes(x=PC1, y=PC2) + geom_point()
+ggplot(plotdata) + aes(x=PC2, y=PC3) + geom_point()
+```
+
+let's add some additional information: the year each article was published.
+
+```{r}
+ggplot(plotdata) + aes(x=PC2, y=PC3, color=year) + geom_point()
+```
+
+
 #### d. Clustering
+
+```{r}
+# k-means calcultion here:
+```
 
 # Further resources 
