@@ -214,6 +214,21 @@ plotdata <- cbind(data, mypca$rotation)
 
 ```{r}
 ggplot(plotdata) + aes(x=PC1, y=PC2) + geom_point()
+```
+
+Now let's identify some articles in the plot:
+
+```{r}
+mindx <- order(plotdata$PC1, decreasing=FALSE)[1:3]
+maxdx <- order(plotdata$PC1, decreasing=TRUE)[1:3]
+
+# view the most divergent titles:
+plotdata$title[mindx]
+plotdata$title[maxdx]
+```
+
+Plot another pair of principal components:
+```{r}
 ggplot(plotdata) + aes(x=PC2, y=PC3) + geom_point()
 ```
 
@@ -223,6 +238,12 @@ let's add some additional information: the year each article was published.
 ggplot(plotdata) + aes(x=PC2, y=PC3, color=year) + geom_point()
 ```
 
+
+Visualize the explained variance:
+
+```{r}
+plot(100 * cumsum(mypca$sdev^2) / sum(mypca$sdev^2), type='l', bty='n', ylab="%", xlab="Number of components", main="Percent variance explained")
+```
 
 #### d. Clustering
 
