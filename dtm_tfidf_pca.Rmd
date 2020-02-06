@@ -37,6 +37,7 @@ The 'tm' - text mining - package has methods for mining text with R including im
 library('tm')
 library('readr')
 library('pcaMethods')
+library('ggplot2')
 ```
 #### b. package help
 You can find the documentation for the package [online](https://cran.r-project.org/web/packages/tm/tm.pdf)\
@@ -128,7 +129,7 @@ mydtm = mydtm[rowSums(mydtm_mat) > 0,]
 ```
 Get rid of duplicates
 ```{r}
-mydtm = unique(mydtm)
+#mydtm = unique(mydtm)
 ```
 Sort the documents by number of tokens
 ```{r}
