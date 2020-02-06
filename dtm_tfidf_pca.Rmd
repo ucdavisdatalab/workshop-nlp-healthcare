@@ -8,6 +8,9 @@ output:
 
 download link for Pamela's slides here\
 
+download data here:\
+[abstracts-datafied.csv]("../data/abstracts-datafied.csv")
+
 # Objectives for Workshop
 ``` {objective}
 1. Introduce Natural Language Processing 
@@ -172,7 +175,7 @@ inspect(tfidf_dtm)
 
 Look at results for a single document
 ```
-doc10 = as.matrix(mydtm[, 10])
+doc10 = as.matrix(mydtm[10,])
 ```
 
 sort the results for that document
