@@ -9,7 +9,7 @@ output:
 download link for Pamela's slides here\
 
 download data here:\
-[abstracts-datafied.csv](/abstracts-datafied.csv)
+[abstracts-datafied.csv](workshop-nlp-healthcare/abstracts-datafied.csv)
 
 # Objectives for Workshop
 ``` {objective}
