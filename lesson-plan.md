@@ -89,7 +89,7 @@ This may be easier to work with.
 Examples:  
 We want to get rid of all the empty documents from the document term matrix.
 ```
-mydtm = mydtm[rowSums(mydtm) > 0]
+mydtm = mydtm[rowSums(mydtm) > 0,]
 ```
 Get rid of duplicates
 ```
