@@ -33,10 +33,9 @@ The 'tm' - text mining - package has methods for mining text with R including im
 
 #### a. install + load the 'tm' package
 ```{r}
-#install.packages(c('tm', 'readr', 'pcaMethods'))
+#install.packages(c('tm', 'readr', 'ggplot2'))
 library('tm')
 library('readr')
-library('pcaMethods')
 library('ggplot2')
 ```
 #### b. package help
