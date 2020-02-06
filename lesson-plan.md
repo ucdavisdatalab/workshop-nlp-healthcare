@@ -45,10 +45,10 @@ COMMENT: THIS CAN BE DONE IN THE DTM, THIS MAY BE EASIER TO FOLLOW IN THE WORKSH
 Use the tm_map function to apply a transformation on each element of the corpus object.  
 Alternatively use the tm_parLapply function to do the same in parallel.
 ```
-mycorpus = tm_map(corpus, removePunctuation)
-mycorpus = tm_map(corpus, removeNumbers)
-mycorpus = tm_map(corpus, tolower)
-mycorpus = tm_map(corpus, removeWords, stopwords("en")) # may need snowballC package
+mycorpus = tm_map(mycorpus, removePunctuation)
+mycorpus = tm_map(mycorpus, removeNumbers)
+mycorpus = tm_map(mycorpus, tolower)
+mycorpus = tm_map(mycorpus, removeWords, stopwords("en")) # may need snowballC package
 ```
 ###### c. Creating a Document Term Matrix from the corpus object    
 From the 'corpus' object we can create a document term matrix.
