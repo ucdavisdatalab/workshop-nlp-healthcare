@@ -30,9 +30,10 @@ The 'tm' - text mining - package has methods for mining text with R including im
 
 #### a. install + load the 'tm' package
 ```
-install.packages(c('tm', 'readr'))
+install.packages(c('tm', 'readr', 'pcaMethods'))
 library('tm')
 library('readr')
+library('pcaMethods')
 ```
 #### b. package help
 You can find the documentation for the package [online](https://cran.r-project.org/web/packages/tm/tm.pdf)\
@@ -186,7 +187,15 @@ doc10_sorted[1:10]
 
 #### b. Computing PCA 
 
+```{r}
+mypca <- prcomp(t(tfidf_dtm), center=TRUE, scale=TRUE)
+```
+
 #### c. Plotting the abstracts
+
+```{r}
+plot(mypca$rotation[, 1:2])
+```
 
 #### d. Clustering
 
