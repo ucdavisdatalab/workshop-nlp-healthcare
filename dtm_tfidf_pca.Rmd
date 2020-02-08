@@ -6,8 +6,6 @@ output:
    rmdformats::readthedown
 ---
 
-download link for Pamela's slides here\
-
 download data here:\
 [abstracts-datafied.csv](workshop-nlp-healthcare/abstracts-datafied.csv)
 
