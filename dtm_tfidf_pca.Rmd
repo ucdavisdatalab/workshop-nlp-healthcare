@@ -221,8 +221,8 @@ ggplot(plotdata) + aes(x=PC1, y=PC2) + geom_point()
 Now let's identify some articles in the plot:
 
 ```{r}
-mindx <- order(plotdata$PC1, decreasing=FALSE)[1:3]
-maxdx <- order(plotdata$PC1, decreasing=TRUE)[1:3]
+mindx <- order(plotdata$PC1, decreasing=FALSE)[1:10]
+maxdx <- order(plotdata$PC1, decreasing=TRUE)[1:10]
 
 # view the most divergent titles:
 plotdata$title[mindx]
