@@ -197,8 +197,8 @@ This is analogous to principal components analysis (PCA). PCA rotates the data p
 #### b. Computing PCA 
 
 ```{r}
-mypca <- prcomp(t(tfidf_dtm), center=TRUE, scale.=TRUE)
-mypca2 <- prcomp(tfidf_dtm, center=TRUE, scale.=TRUE)
+articles <- t(tfidf_dtm)
+mypca <- prcomp(articles, center=TRUE, scale=TRUE)
 ```
 
 #### c. Plotting the abstracts
@@ -217,12 +217,12 @@ ggplot(plotdata) + aes(x=PC1, y=PC2) + geom_point()
 Now let's identify some articles in the plot:
 
 ```{r}
-mindx <- order(plotdata$PC1, decreasing=FALSE)[1:10]
-maxdx <- order(plotdata$PC1, decreasing=TRUE)[1:10]
+min_index <- order(plotdata$PC1, decreasing=FALSE)
+max_index <- order(plotdata$PC1, decreasing=TRUE)
 
 # view the most divergent titles:
-plotdata$title[mindx]
-plotdata$title[maxdx]
+plotdata$title[min_index[1:6]]
+plotdata$title[max_index[1:6]]
 ```
 
 Plot another pair of principal components:
