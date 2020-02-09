@@ -9,7 +9,7 @@ output:
 download data here:\
 [abstracts-datafied.csv](workshop-nlp-healthcare/abstracts-datafied.csv)
 
-# Objectives for Workshop
+# Objectives for Coding Session
 ``` {objective}
 1. Introduce Natural Language Processing 
 2. Introduce the 'tm' package in R 
@@ -22,33 +22,46 @@ download data here:\
 # Presentation of the data
 
 For this workshop, we are looking at a set of abstracts of medical journal articles related to breast cancer.
-We have X abstracts, stored in a csv, with duplicates. 
+We have 714 abstracts, stored in a csv, with duplicates. 
 We would like to get the key words from each abstract, as well as visualize / check for groupings of abstracts in two dimensions.
 
 # The tm package
 
+In R, and most programming languages, there are many packages - code written by other people to help with certain tasks. 
+For this workshop we will be using three packages - 'tm', 'readr', and 'ggplot2'.
 The 'tm' - text mining - package has methods for mining text with R including importing data, storing corpora, applying operations on corpora (such as common preprocessing methods), and document term matrices.
+The 'readr' package has functions related to reading in data from csv and other similar formats.
+The 'ggplot2' package has functions related to plotting and visualizing data.
 
-#### a. install + load the 'tm' package
-```{r}
-#install.packages(c('tm', 'readr', 'ggplot2'))
+#### a. install + load the packages we will use.
+
+Run this command if you don't already have these packages installed.
+```{r, eval=FALSE}
+install.packages(c('tm', 'readr', 'ggplot2'))
+```
+Once the packages are installed, load them into your R environment.
+```{r, message=FALSE}
 library('tm')
 library('readr')
 library('ggplot2')
 ```
 #### b. package help
 You can find the documentation for the package [online](https://cran.r-project.org/web/packages/tm/tm.pdf)\
-Within R/RStudio you can browse function documentation
+Within R/RStudio you can browse function documentation with the following syntax.
 ```
 ?TermDocumentMatrix
 ```
 
-# Loading Text into R - the corpus object
+# Loading The Data
 
 #### a.  Create a 'Corpus' object using the 'tm' package
 The first step is to load the text data into a 'corpus' object.
 ```{r}
 data <- read_csv(url("https://raw.githubusercontent.com/ucdavisdatalab/workshop-nlp-healthcare/master/data/abstracts-datafied.csv"))
+```
+
+Processing the text in R.
+```{r}
 mycorpus = Corpus(VectorSource(data$text))
 ```
 
