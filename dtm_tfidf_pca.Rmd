@@ -62,6 +62,8 @@ mycorpus = tm_map(mycorpus, removePunctuation, ucp=TRUE)
 mycorpus = tm_map(mycorpus, removeNumbers)
 mycorpus = tm_map(mycorpus, tolower)
 mycorpus = tm_map(mycorpus, removeWords, stopwords("en")) # may need snowballC package
+
+tm_map(mycorpus, removeWords, c("breast", "cervical", "cervix", "prostate"))
 ```
 # The Document Term Matrix 
 
