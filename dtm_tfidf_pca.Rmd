@@ -6,62 +6,100 @@ output:
    rmdformats::readthedown
 ---
 
-download data here:\
-[abstracts-datafied.csv](workshop-nlp-healthcare/abstracts-datafied.csv)
+# Setup
 
-# Objectives for Workshop
+#### a. objectives
 ``` {objective}
-1. Introduce Natural Language Processing 
-2. Introduce the 'tm' package in R 
-3. Explain ways of representing documents so they can be analyzed with computational methods
-4. Demonstrate usage of the corpus and DocumentTermMatrix objects
-5. Explain and demonstrate TF-IDF weighting 
-6. Explain PCA and its applications for corpus exploration
+1. Show how to store and clean text data with the 'tm' package
+2. Introduce Bag of Words representation of documents
+3. Demonstrate how to create and use a DocumentTermMatrix
+4. Explain and demonstrate TF-IDF weighting 
+5. Explain PCA and its applications for corpus exploration
 ```
 
-# Presentation of the data
+#### b. packages needed
 
-For this workshop, we are looking at a set of abstracts of medical journal articles related to breast cancer.
-We have X abstracts, stored in a csv, with duplicates. 
-We would like to get the key words from each abstract, as well as visualize / check for groupings of abstracts in two dimensions.
-
-# The tm package
-
+In R, and most programming languages, there are many packages - code written by other people to help with certain tasks. 
+For this workshop we will be using two packages - 'tm' and 'ggplot2'.
 The 'tm' - text mining - package has methods for mining text with R including importing data, storing corpora, applying operations on corpora (such as common preprocessing methods), and document term matrices.
+The 'ggplot2' package has functions related to plotting and visualizing data.
 
-#### a. install + load the 'tm' package
-```{r}
-#install.packages(c('tm', 'ggplot2', 'Matrix'))
+
+Run this command if you don't already have these packages installed.
+```{r, eval=FALSE}
+install.packages('tm')
+install.packages('ggplot2')
+install.packages('Matrix')
+```
+
+Once the packages are installed, load them into your R environment.
+```{r, message=FALSE}
 library('tm')
 library('ggplot2')
 library('Matrix')
 ```
-#### b. package help
+
 You can find the documentation for the package [online](https://cran.r-project.org/web/packages/tm/tm.pdf)\
-Within R/RStudio you can browse function documentation
+Within R/RStudio you can browse function documentation with the following syntax.
 ```
 ?TermDocumentMatrix
 ```
 
-# Loading Text into R - the corpus object
+#### c. data for this workshop
 
-#### a.  Create a 'Corpus' object using the 'tm' package
-The first step is to load the text data into a 'corpus' object.
+For this workshop, we are looking at a set of abstracts of medical journal articles related to breast cancer.
+We have 714 abstracts, stored in a csv, with duplicates. 
+We would like to get the key words from each abstract, as well as visualize / check for groupings of abstracts in two dimensions.\
+
+Now we will load in the abstract data into a csv, using the "read_csv" function from the 'readr' package we installed and loaded earlier. 
+
 ```{r}
-data <- read.csv(url("https://ucdavisdatalab.github.io/workshop-nlp-healthcare/abstracts.csv"), stringsAsFactors=FALSE)
+data <- read.csv(url("https://ucdavisdatalab.github.io/workshop-nlp-healthcare/abstracts.csv"))
+```
+
+```{r}
+head(data)
+```
+We have a dataframe with 714 rows, each row referring to a different abstract. 
+For each abstract we have the authors, year published, title fo the paper, name of the journal, and the full text.
+
+Let's look at the text from the first abstract
+```{r}
+data$text[[1]]
+```
+Notice that within the text there are a variety of potential issues. 
+For example, some words are capitalized, there is punctuation, weird symbols, and numbers. 
+For many NLP methods, we want to normalize the texts to get around these issues. 
+The 'tm' package has several built in features for normalizing text. 
+The first step is to load the text into a 'corpus' object.
+
+
+# Preprocessing
+
+#### a. Load the text column into a 'corpus' object
+```{r}
 mycorpus = Corpus(VectorSource(data$text))
+inspect(head(mycorpus))
 ```
 
 #### b.  Preprocess the corpus object
 Use the tm_map function to apply a transformation on each element of the corpus object.  
 Alternatively use the tm_parLapply function to do the same in parallel.
-```{r}
+```{r, warning=FALSE}
 mycorpus = tm_map(mycorpus, removePunctuation, ucp=TRUE)
 mycorpus = tm_map(mycorpus, removeNumbers)
 mycorpus = tm_map(mycorpus, tolower)
 mycorpus = tm_map(mycorpus, removeWords, stopwords("en")) # may need snowballC package
 ```
-# The Document Term Matrix 
+
+Now that we have normalized the text, lets look at the first abstract again.
+```{r}
+mycorpus[[1]]$content
+```
+
+It looks 'normalized' but how do we model this? how do we apply NLP algorithms on it?
+
+# The Bag of Words Representation
 
 Consider: \
 what is a text document to a computer?  \
@@ -74,12 +112,23 @@ Bag of Words is a way of representing a document that encodes a document as a 'b
 The document is represented as the words that appeared in the document and the number of times those words appeared.
 All information about word order is lost in this representation, however, for many NLP methods, this is still an effective representation of the content of the document.\
 
-In R we can use a Document Term Matrix.  
+![bag of words image](./img/bow.png)
+
+The power of the bag of words representation is that each document can be represented in the same vector space.
+We do so by defining the vector dimensions to reflect the vocabulary accross all the documents.
+The vectors can then be merged into a matrix called a Document Term Matrix.
+
+![dtm image](./img/dtm.png)
+
+
+# The Document Term Matrix
 
 In brief, a Document Term Matrix:  
   - each document is represented by a set of tokens and their counts  
   - the order of tokens is not encoded in this representation  
   - the basis of many text processing methods, including document classification and topic modeling  
+
+In R we can use a DocumentTermMatrix function from the 'tm' package to create this structure from our corpus.  
 
 #### a. Creating a Document Term Matrix from the corpus object    
 From the 'corpus' object we can create a document term matrix.
@@ -90,52 +139,29 @@ mydtm
 Note: the DocumentTermMatrix automatically sets all the characters to lower case.
 
 #### b. Exploring with a DTM  
-DocumentTermMatrices are stored as Simple Triplet Matrices.  
-Simple Triplet Matrices are a way of storing sparse matrices.  
-Be aware of this when probing the object.  
-```{r}
-class(mydtm)
-str(mydtm)
-```
 
 A useful tool is the inspect function from the 'tm' package.
 ```{r}
 inspect(mydtm)
 ```
 
-Use the 'slam' package to perform common operations on the DTM in simple triplet matrix form
+From this format it we can find word counts and document lengths.
 ```{r}
-#install.packages("slam")
-library(slam)
-myrowsums = row_sums(mydtm)
-mycolsums = col_sums(mydtm)
-myrowmeans = row_means(mydtm)
-mycolmeans = col_means(mydtm)
+documentLengths = rowSums(as.matrix(mydtm))
+wordCounts = colSums(as.matrix(mydtm))
 ```
 
-For small dtms, as is the case with our workshop data, we can convert to a non sparse matrix format.  
-This may be easier to work with.
+We can get a sorted list of the biggest documents.
 ```{r}
-mydtm_mat = as.matrix(mydtm)
+sortedDocuments = sort(documentLengths, decreasing=TRUE)
+barplot(sortedDocuments[1:10], col = "tan", las = 2)
+```
+Or a sorted list of words and their frequencies.
+```{r}
+sortedWordCounts = sort(wordCounts, decreasing=TRUE)
+barplot(sortedWordCounts[1:10], col = "tan", las = 2)
 ```
 
-Examples:  
-We want to get rid of all the empty documents from the document term matrix.
-```{r}
-mydtm = mydtm[rowSums(mydtm_mat) > 0,]
-```
-Get rid of duplicates
-```{r}
-#mydtm = unique(mydtm)
-```
-Sort the documents by number of tokens
-```{r}
-doccounts = order(rowSums(mydtm_mat), decreasing=TRUE)
-```
-Similarly find the most common words
-```{r}
-wordfreqs = order(colSums(mydtm_mat), decreasing=TRUE)
-``` 
 # TF-IDF
 
 TF-IDF stands for term frequency-inverse document frequency. 
@@ -156,8 +182,8 @@ Conversely, if a word appears only in few documents, it should be highly weighte
 tfidf(t,d,D) = tf(t,d) * idf(t,D)
 ```
 Where, tf(t,d) is a function of a terms(t) frequency for a given document(d). 
-And, idf(t,D) is the inverse function of a terms(t) appearance across all the documents(D).
-There are many variations of functions for tf(t,d) and idf(t,D) that can be used for computing TF-IDF.
+And, idf(t,D) is the inverse function of a terms(t) appearance across all the documents(D).  There are many variations of functions for tf(t,d) and idf(t,D) that can be used for computing TF-IDF.  
+
 
 #### c. TF-IDF from DTM
 Create tf-idf weighted DTM in R
@@ -171,15 +197,14 @@ Inspect the new dtm
 inspect(tfidf_dtm)
 ```
 
-Look at results for a single document
+Compare the tfidf representation with the tf representation for a single abstract
 ```{r}
-doc10 = as.matrix(mydtm[10,])
-```
-
-sort the results for that document
-```{r}
-doc10_sorted = doc10[sort.list(-doc10[,1]), decreasing=TRUE]
-doc10_sorted[1:10] 
+tf_doc10 = as.matrix(mydtm[10,])
+tf = colSums(tf_doc10)
+tfidf_doc10 = as.matrix(tfidf_dtm[10,])
+tfidf = colSums(tfidf_doc10)
+barplot(sort(tf, decreasing=TRUE)[1:10], col = "tan", las = 2)
+barplot(sort(tfidf, decreasing=TRUE)[1:10], col = "tan", las = 2)
 ```
 
 # PCA
@@ -243,12 +268,6 @@ Visualize the explained variance:
 
 ```{r}
 plot(100 * cumsum(mypca$sdev^2) / sum(mypca$sdev^2), type='l', bty='n', ylab="%", xlab="Number of components", main="Percent variance explained")
-```
-
-#### d. Clustering
-
-```{r}
-# k-means calcultion here:
 ```
 
 # Further resources 
