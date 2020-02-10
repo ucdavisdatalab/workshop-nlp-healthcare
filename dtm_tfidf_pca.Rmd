@@ -210,14 +210,23 @@ barplot(sort(tfidf, decreasing=TRUE)[1:10], col = "tan", las = 2)
 # PCA
 
 #### a. Intuition behind PCA
+The most straightforward way to visualize the information in the TF-IDF matrix is to plot its columns, but this is unsatisfactory because there are thousands of them, and each column is mostly zeroes:
 
+```{r}
+plot(as.matrix(tfidf_dtm[, 1:2]))
+```
+
+```{r eval=FALSE}
 Think of looking up at the night sky. You might see something like this:
 ![Milky Way galaxy as seen from Earth](img/milky-way-1.jpg)
 
-You can clearly see that the Milky Way has a major axis and a minor axis. But we know that our galaxy has a spiral shape - we just can't see it because we're looking from a particular perspective. If you took the coordinates of all the stars in our galaxy, you could rotate those coordinates to get an image like this:
+You can clearly see that the Milky Way has a major axis and a minor axis. But we know that our galaxy has a spiral shape - we just can't see it because we're looking from a particular perspective. If you took the coordinates of all the stars in our galaxy, you could rotate those cordinates to get an image like this:
 ![Milky Way galaxy as seen from "above"](img/milky-way-above.jpg)
 
-This is analogous to principal components analysis (PCA). PCA rotates the data points to get a better perspective. The new coordinates are aligned by PCA so that the direction with the greatest variability comes first, then the  next most, and so on. The analogy is that our perspective from Earth shows one axis of the Milky Way with a lot of variability, and one with only a little. PCA would rotate that view so the first two "principal components" show the galaxy's spiral shape, with the third (showing its thickness being last).
+This is analogous to principal components analysis (PCA). PCA rotates the data points to get a better perspective. The new cordinates are aligned by PCA so that the direction with the gratest variability comes first, then the  next most, and so on. The analogy is that our perspective from Earth shows one axis of the Milky Way with a lot of variability, and one with only a little. PCA would rotate that view so the first two "principal components" show the galaxy's spiral shape, with the third (showing its thickness being last).
+```
+
+Our answer is to use principal components analysis (PCA), which rotates the big matrix until we are "looking" down the "direction" (or component) with the most variability. The result is another matrix of equal size to the first, but each column contains information from all of the columns of the original matrix, and they are sorted so that the most important columns are first. We can observe get the most important relationships by focusing on just a few of these "principal components". Let's continue with our example:
 
 #### b. Computing PCA 
 
