@@ -6,5 +6,9 @@ get_corpus <- function(data, remove=c("")) {
   newcorpus = tm_map(newcorpus, removeWords, stopwords("en")) # may need snowballC package
   newcorpus = tm_map(newcorpus, removeWords, remove)
   
-  newcorpus
+  dtm = DocumentTermMatrix(combined_corpus)
+  tfidf = weightTfIdf(dtm, normalize=TRUE)
+  articles <- t(tfidf)
+  
+  prcomp(articles, center=TRUE, scale=TRUE)
 }
