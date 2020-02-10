@@ -412,3 +412,16 @@ plot(100 * cumsum(mypca$sdev^2) / sum(mypca$sdev^2), type='l', bty='n', ylab="%"
 ```
 
 # Further resources 
+
+Useful packages:
+- ntlk (python)
+- spaCy (python)
+- quanteda (R)
+- tidytext (R)
+
+Classes:
+- [Dan Jurafsky and Christopher Manning NLP youtube series](https://www.youtube.com/playlist?list=PLoROMvodv4rOFZnDyrlW3-nI7tMLtmiJZ&disable_polymer=true)
+
+Datasets:
+- [https://github.com/niderhoff/nlp-datasets](https://github.com/niderhoff/nlp-datasets)
+- [https://archive.ics.uci.edu/ml/datasets.php?format=&task=&att=&area=&numAtt=&numIns=&type=text&sort=nameUp&view=table](https://archive.ics.uci.edu/ml/datasets.php?format=&task=&att=&area=&numAtt=&numIns=&type=text&sort=nameUp&view=table)
