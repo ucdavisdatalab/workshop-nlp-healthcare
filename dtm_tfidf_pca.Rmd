@@ -8,6 +8,8 @@ output:
 
 # Setup
 
+link to lesson plan: [https://ucdavisdatalab.github.io/workshop-nlp-healthcare/](https://ucdavisdatalab.github.io/workshop-nlp-healthcare/)
+
 #### a. objectives
 ``` {objective}
 1. Show how to store and clean text data with the 'tm' package
@@ -51,7 +53,6 @@ For this workshop, we are looking at a set of abstracts of medical journal artic
 We have 714 abstracts, stored in a csv, with duplicates. 
 We would like to get the key words from each abstract, as well as visualize / check for groupings of abstracts in two dimensions.\
 
-Now we will load in the abstract data into a csv, using the "read_csv" function from the 'readr' package we installed and loaded earlier. 
 
 ```{r}
 data <- read.csv(url("https://ucdavisdatalab.github.io/workshop-nlp-healthcare/abstracts.csv"))
@@ -61,7 +62,7 @@ data <- read.csv(url("https://ucdavisdatalab.github.io/workshop-nlp-healthcare/a
 head(data)
 ```
 We have a dataframe with 714 rows, each row referring to a different abstract. 
-For each abstract we have the authors, year published, title fo the paper, name of the journal, and the full text.
+For each abstract we have the authors, year published, title of the paper, name of the journal, and the full text.
 
 Let's look at the text from the first abstract
 ```{r}
@@ -78,7 +79,7 @@ The first step is to load the text into a 'corpus' object.
 
 #### a. Load the text column into a 'corpus' object
 ```{r}
-mycorpus = Corpus(VectorSource(data$text))
+mycorpus <- Corpus(VectorSource(data$text))
 inspect(head(mycorpus))
 ```
 
@@ -86,10 +87,10 @@ inspect(head(mycorpus))
 Use the tm_map function to apply a transformation on each element of the corpus object.  
 Alternatively use the tm_parLapply function to do the same in parallel.
 ```{r, warning=FALSE}
-mycorpus = tm_map(mycorpus, removePunctuation, ucp=TRUE)
-mycorpus = tm_map(mycorpus, removeNumbers)
-mycorpus = tm_map(mycorpus, tolower)
-mycorpus = tm_map(mycorpus, removeWords, stopwords("en")) # may need snowballC package
+mycorpus <- tm_map(mycorpus, tolower)
+mycorpus <- tm_map(mycorpus, removePunctuation, ucp=TRUE)
+mycorpus <- tm_map(mycorpus, removeNumbers)
+mycorpus <- tm_map(mycorpus, removeWords, stopwords("en")) 
 ```
 
 Now that we have normalized the text, lets look at the first abstract again.
@@ -115,7 +116,7 @@ All information about word order is lost in this representation, however, for ma
 ![bag of words image](./img/bow.png)
 
 The power of the bag of words representation is that each document can be represented in the same vector space.
-We do so by defining the vector dimensions to reflect the vocabulary accross all the documents.
+We do so by defining the vector dimensions to reflect the vocabulary across all the documents.
 The vectors can then be merged into a matrix called a Document Term Matrix.
 
 ![dtm image](./img/dtm.png)
@@ -133,8 +134,7 @@ In R we can use a DocumentTermMatrix function from the 'tm' package to create th
 #### a. Creating a Document Term Matrix from the corpus object    
 From the 'corpus' object we can create a document term matrix.
 ```{r}
-mydtm = DocumentTermMatrix(mycorpus)
-mydtm 
+mydtm <- DocumentTermMatrix(mycorpus)
 ```
 Note: the DocumentTermMatrix automatically sets all the characters to lower case.
 
@@ -147,19 +147,19 @@ inspect(mydtm)
 
 From this format it we can find word counts and document lengths.
 ```{r}
-documentLengths = rowSums(as.matrix(mydtm))
-wordCounts = colSums(as.matrix(mydtm))
+document_lengths <- rowSums(as.matrix(mydtm))
+word_counts <- colSums(as.matrix(mydtm))
 ```
 
 We can get a sorted list of the biggest documents.
 ```{r}
-sortedDocuments = sort(documentLengths, decreasing=TRUE)
-barplot(sortedDocuments[1:10], col = "tan", las = 2)
+sorted_document_lengths <- sort(document_lengths, decreasing=TRUE)
+barplot(sorted_document_lengths[1:10], col = "tan", las = 2)
 ```
 Or a sorted list of words and their frequencies.
 ```{r}
-sortedWordCounts = sort(wordCounts, decreasing=TRUE)
-barplot(sortedWordCounts[1:10], col = "tan", las = 2)
+sorted_word_counts <- sort(word_counts, decreasing=TRUE)
+barplot(sorted_word_counts[1:10], col = "tan", las = 2)
 ```
 
 # TF-IDF
@@ -188,7 +188,7 @@ And, idf(t,D) is the inverse function of a terms(t) appearance across all the do
 #### c. TF-IDF from DTM
 Create tf-idf weighted DTM in R
 ```{r}
-tfidf_dtm = weightTfIdf(mydtm, normalize=TRUE) 
+tfidf_dtm <- weightTfIdf(mydtm, normalize=TRUE) 
 ```
 
 #### d. Looking at the results
@@ -199,10 +199,10 @@ inspect(tfidf_dtm)
 
 Compare the tfidf representation with the tf representation for a single abstract
 ```{r}
-tf_doc10 = as.matrix(mydtm[10,])
-tf = colSums(tf_doc10)
-tfidf_doc10 = as.matrix(tfidf_dtm[10,])
-tfidf = colSums(tfidf_doc10)
+tf_doc10 <- as.matrix(mydtm[10,])
+tf <- colSums(tf_doc10)
+tfidf_doc10 <- as.matrix(tfidf_dtm[10,])
+tfidf <- colSums(tfidf_doc10)
 barplot(sort(tf, decreasing=TRUE)[1:10], col = "tan", las = 2)
 barplot(sort(tfidf, decreasing=TRUE)[1:10], col = "tan", las = 2)
 ```
@@ -214,10 +214,10 @@ barplot(sort(tfidf, decreasing=TRUE)[1:10], col = "tan", las = 2)
 Think of looking up at the night sky. You might see something like this:
 ![Milky Way galaxy as seen from Earth](img/milky-way-1.jpg)
 
-You can clearly see that the Milky Way has a major axis and a minor axis. But we know that our galaxy has a spiral shape - we just can't see it because we're looking from a particular perspective. If you took the coordinates of all the stars in our galaxy, you could rotate those cordinates to get an image like this:
+You can clearly see that the Milky Way has a major axis and a minor axis. But we know that our galaxy has a spiral shape - we just can't see it because we're looking from a particular perspective. If you took the coordinates of all the stars in our galaxy, you could rotate those coordinates to get an image like this:
 ![Milky Way galaxy as seen from "above"](img/milky-way-above.jpg)
 
-This is analogous to principal components analysis (PCA). PCA rotates the data points to get a better perspective. The new cordinates are aligned by PCA so that the direction with the gratest variability comes first, then the  next most, and so on. The analogy is that our perspective from Earth shows one axis of the Milky Way with a lot of variability, and one with only a little. PCA would rotate that view so the first two "principal components" show the galaxy's spiral shape, with the third (showing its thickness being last).
+This is analogous to principal components analysis (PCA). PCA rotates the data points to get a better perspective. The new coordinates are aligned by PCA so that the direction with the greatest variability comes first, then the  next most, and so on. The analogy is that our perspective from Earth shows one axis of the Milky Way with a lot of variability, and one with only a little. PCA would rotate that view so the first two "principal components" show the galaxy's spiral shape, with the third (showing its thickness being last).
 
 #### b. Computing PCA 
 
