@@ -210,7 +210,7 @@ barplot(sort(tfidf, decreasing=TRUE)[1:10], col = "tan", las = 2)
 # PCA
 
 #### a. Intuition behind PCA
-The most straightforward way to visualize the information in the TF-IDF matrix is to plot its columns, but this is unsatisfactory because there are thousands of them, and each column is mostly zeroes:
+The most straightforward way to visualize the information in the TF-IDF matrix is to plot its columns, but this is unsatisfactory because there are thousands of them, and each column is mostly zeroes (so contains little information):
 
 ```{r}
 plot(as.matrix(tfidf_dtm[, 1:2]))
