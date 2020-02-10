@@ -19,8 +19,8 @@ If you will be coding along please check that you have R and RStudio installed o
 
 #### b. About you 
 
-[Word frequencies](img/wordfrequencies.html)
-[Bigrams](img/bigrams.html)
+[Word frequencies](wordfrequencies.html)
+[Bigrams](bigrams.html)
 
 # Objectives for this Workshop
 ``` {objective}
