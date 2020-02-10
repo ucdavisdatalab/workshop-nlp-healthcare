@@ -6,9 +6,6 @@ output:
    rmdformats::readthedown
 ---
 
-download data here:\
-[abstracts-datafied.csv](workshop-nlp-healthcare/abstracts-datafied.csv)
-
 # Objectives for Coding Session
 ``` {objective}
 1. Introduce Natural Language Processing 
@@ -30,19 +27,18 @@ We would like to get the key words from each abstract, as well as visualize / ch
 In R, and most programming languages, there are many packages - code written by other people to help with certain tasks. 
 For this workshop we will be using three packages - 'tm', 'readr', and 'ggplot2'.
 The 'tm' - text mining - package has methods for mining text with R including importing data, storing corpora, applying operations on corpora (such as common preprocessing methods), and document term matrices.
-The 'readr' package has functions related to reading in data from csv and other similar formats.
 The 'ggplot2' package has functions related to plotting and visualizing data.
 
 #### a. install + load the packages we will use.
 
 Run this command if you don't already have these packages installed.
 ```{r, eval=FALSE}
-install.packages(c('tm', 'readr', 'ggplot2'))
+install.packages('tm')
+install.packages('ggplot2')
 ```
 Once the packages are installed, load them into your R environment.
 ```{r, message=FALSE}
 library('tm')
-library('readr')
 library('ggplot2')
 ```
 #### b. package help
@@ -58,7 +54,7 @@ Within R/RStudio you can browse function documentation with the following syntax
 Now we will load in the abstract data into a csv, using the "read_csv" function from the 'readr' package we installed and loaded earlier. 
 
 ```{r}
-data <- read_csv(url("https://raw.githubusercontent.com/ucdavisdatalab/workshop-nlp-healthcare/master/data/abstracts-datafied.csv"))
+data <- read.csv(url("https://ucdavisdatalab.github.io/workshop-nlp-healthcare/abstracts.csv"))
 ```
 
 #### b. Inspect the data frame
@@ -200,15 +196,14 @@ Inspect the new dtm
 inspect(tfidf_dtm)
 ```
 
-Look at results for a single document
+Compare the tfidf representation with the tf representation for a single abstract
 ```{r}
-doc10 = as.matrix(mydtm[10,])
-```
-
-sort the results for that document
-```{r}
-doc10_sorted = doc10[sort.list(-doc10[,1]), decreasing=TRUE]
-doc10_sorted[1:10] 
+tf_doc10 = as.matrix(mydtm[10,])
+tf = colSums(tf_doc10)
+tfidf_doc10 = as.matrix(tfidf_dtm[10,])
+tfidf = colSums(tfidf_doc10)
+barplot(sort(tf, decreasing=TRUE)[1:10], col = "tan", las = 2)
+barplot(sort(tfidf, decreasing=TRUE)[1:10], col = "tan", las = 2)
 ```
 
 # PCA
@@ -270,12 +265,6 @@ Visualize the explained variance:
 
 ```{r}
 plot(100 * cumsum(mypca$sdev^2) / sum(mypca$sdev^2), type='l', bty='n', ylab="%", xlab="Number of components", main="Percent variance explained")
-```
-
-#### d. Clustering
-
-```{r}
-# k-means calcultion here:
 ```
 
 # Further resources 
