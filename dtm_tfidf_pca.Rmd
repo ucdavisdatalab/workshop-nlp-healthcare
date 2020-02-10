@@ -31,9 +31,10 @@ The 'tm' - text mining - package has methods for mining text with R including im
 
 #### a. install + load the 'tm' package
 ```{r}
-#install.packages(c('tm', 'ggplot2'))
+#install.packages(c('tm', 'ggplot2', 'Matrix'))
 library('tm')
 library('ggplot2')
+library('Matrix')
 ```
 #### b. package help
 You can find the documentation for the package [online](https://cran.r-project.org/web/packages/tm/tm.pdf)\
@@ -232,7 +233,9 @@ ggplot(plotdata) + aes(x=PC2, y=PC3) + geom_point()
 let's add some additional information: the year each article was published.
 
 ```{r}
-ggplot(plotdata) + aes(x=PC2, y=PC3, color=year) + geom_point()
+source(url("https://ucdavisdatalab.github.io/workshop-nlp-healthcare/top_terms.R"))
+plotdata[['top_terms']] <- top_terms(tfidf_dtm)
+ggplot(plotdata) + aes(x=PC2, y=PC3, label=top_terms) + geom_text(check_overlap=TRUE)
 ```
 
 
