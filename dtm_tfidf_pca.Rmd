@@ -8,6 +8,8 @@ output:
 
 # Setup
 
+link to lesson plan: [https://ucdavisdatalab.github.io/workshop-nlp-healthcare/](https://ucdavisdatalab.github.io/workshop-nlp-healthcare/)
+
 #### a. objectives
 ``` {objective}
 1. Show how to store and clean text data with the 'tm' package
@@ -86,10 +88,10 @@ inspect(head(mycorpus))
 Use the tm_map function to apply a transformation on each element of the corpus object.  
 Alternatively use the tm_parLapply function to do the same in parallel.
 ```{r, warning=FALSE}
+mycorpus = tm_map(mycorpus, tolower)
 mycorpus = tm_map(mycorpus, removePunctuation, ucp=TRUE)
 mycorpus = tm_map(mycorpus, removeNumbers)
-mycorpus = tm_map(mycorpus, tolower)
-mycorpus = tm_map(mycorpus, removeWords, stopwords("en")) # may need snowballC package
+mycorpus = tm_map(mycorpus, removeWords, stopwords("en")) 
 ```
 
 Now that we have normalized the text, lets look at the first abstract again.
