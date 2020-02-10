@@ -100,10 +100,8 @@ $(document).ready(function () {
     <h2><a href="#content">NLP Workshop</a></h2>
     <div id="text-table-of-contents">
       <ul>
-      <li><a href="#objectives-for-coding-session">Objectives for Coding Session</a></li>
-      <li><a href="#presentation-of-the-data">Presentation of the data</a></li>
-      <li><a href="#the-tm-package">The tm package</a></li>
-      <li><a href="#loading-the-data">Loading The Data</a></li>
+      <li><a href="#setup">Setup</a></li>
+      <li><a href="#preprocessing">Preprocessing</a></li>
       <li><a href="#the-bag-of-words-representation">The Bag of Words Representation</a></li>
       <li><a href="#the-document-term-matrix">The Document Term Matrix</a></li>
       <li><a href="#tf-idf">TF-IDF</a></li>
@@ -114,47 +112,34 @@ $(document).ready(function () {
 </div>
 
 <div id="main">
-<div id="objectives-for-coding-session" class="section level1">
-<h1>Objectives for Coding Session</h1>
-<pre class="objective"><code>1. Introduce Natural Language Processing 
-2. Introduce the 'tm' package in R 
-3. Explain ways of representing documents so they can be analyzed with computational methods
-4. Demonstrate usage of the corpus and DocumentTermMatrix objects
-5. Explain and demonstrate TF-IDF weighting 
-6. Explain PCA and its applications for corpus exploration</code></pre>
+<div id="setup" class="section level1">
+<h1>Setup</h1>
+<div id="a.-objectives" class="section level4">
+<h4>a. objectives</h4>
+<pre class="objective"><code>1. Show how to store and clean text data with the 'tm' package
+2. Introduce Bag of Words representation of documents
+3. Demonstrate how to create and use a DocumentTermMatrix
+4. Explain and demonstrate TF-IDF weighting 
+5. Explain PCA and its applications for corpus exploration</code></pre>
 </div>
-<div id="presentation-of-the-data" class="section level1">
-<h1>Presentation of the data</h1>
-<p>For this workshop, we are looking at a set of abstracts of medical journal articles related to breast cancer. We have 714 abstracts, stored in a csv, with duplicates. We would like to get the key words from each abstract, as well as visualize / check for groupings of abstracts in two dimensions.</p>
-</div>
-<div id="the-tm-package" class="section level1">
-<h1>The tm package</h1>
-<p>In R, and most programming languages, there are many packages - code written by other people to help with certain tasks. For this workshop we will be using three packages - ‘tm’, ‘readr’, and ‘ggplot2’. The ‘tm’ - text mining - package has methods for mining text with R including importing data, storing corpora, applying operations on corpora (such as common preprocessing methods), and document term matrices. The ‘ggplot2’ package has functions related to plotting and visualizing data.</p>
-<div id="a.-install-load-the-packages-we-will-use." class="section level4">
-<h4>a. install + load the packages we will use.</h4>
+<div id="b.-packages-needed" class="section level4">
+<h4>b. packages needed</h4>
+<p>In R, and most programming languages, there are many packages - code written by other people to help with certain tasks. For this workshop we will be using two packages - ‘tm’ and ‘ggplot2’. The ‘tm’ - text mining - package has methods for mining text with R including importing data, storing corpora, applying operations on corpora (such as common preprocessing methods), and document term matrices. The ‘ggplot2’ package has functions related to plotting and visualizing data.</p>
 <p>Run this command if you don’t already have these packages installed.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="st">'tm'</span>)
 <span class="kw">install.packages</span>(<span class="st">'ggplot2'</span>)</code></pre></div>
 <p>Once the packages are installed, load them into your R environment.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(<span class="st">'tm'</span>)
 <span class="kw">library</span>(<span class="st">'ggplot2'</span>)</code></pre></div>
-</div>
-<div id="b.-package-help" class="section level4">
-<h4>b. package help</h4>
 <p>You can find the documentation for the package <a href="https://cran.r-project.org/web/packages/tm/tm.pdf">online</a><br />
 Within R/RStudio you can browse function documentation with the following syntax.</p>
 <pre><code>?TermDocumentMatrix</code></pre>
 </div>
-</div>
-<div id="loading-the-data" class="section level1">
-<h1>Loading The Data</h1>
-<div id="a.-download-and-load-in-the-data" class="section level4">
-<h4>a. Download and load in the data</h4>
-<p>Now we will load in the abstract data into a csv, using the “read_csv” function from the ‘readr’ package we installed and loaded earlier.</p>
+<div id="c.-data-for-this-workshop" class="section level4">
+<h4>c. data for this workshop</h4>
+<p>For this workshop, we are looking at a set of abstracts of medical journal articles related to breast cancer. We have 714 abstracts, stored in a csv, with duplicates. We would like to get the key words from each abstract, as well as visualize / check for groupings of abstracts in two dimensions.<br />
+Now we will load in the abstract data into a csv, using the “read_csv” function from the ‘readr’ package we installed and loaded earlier.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="kw">url</span>(<span class="st">&quot;https://ucdavisdatalab.github.io/workshop-nlp-healthcare/abstracts.csv&quot;</span>))</code></pre></div>
-</div>
-<div id="b.-inspect-the-data-frame" class="section level4">
-<h4>b. Inspect the data frame</h4>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(data)</code></pre></div>
 <pre><code>##   authors year
 ## 1         2008
@@ -191,8 +176,11 @@ Let’s look at the text from the first abstract</p>
 ## 714 Levels: 85 Female patients with early stage breast cancer, i.e., Stage I and II were treated by limited surgery followed by radical radiation therapy at Massachusetts General Hospital between January, 1956, and December, 1974. Patients included those who were medically inoperable or who refused mastectomy. The 5-year survival rate was 83% and 76% for Stage I and II, respectively. The corresponding disease free survival (absolute) was 67% and 42%. Although the number of patients so treated is small, there was no significant difference in survival from the results of the radical mastectomy series at the same institution. No major complications were encountered. Seventeen of eighty-five patients developed minor problems; mostly fibrosis and minimal arm lymphedema stemming from older orthovoltage equipment and treatment techniques. With the current availability of megavoltage equipment, improvements in techniques and dosimetry, complications should decrease. Combined limited surgery and radical radiation therapy should be considered in those patients where a radical mastectomy is not feasible because of psychological or medical problems. Since this procedure results in a cosmetically acceptable breast, radical radiation in early stage breast cancer seems a reasonable alternative to radical mastectomy. ...</code></pre>
 <p>Notice that within the text there are a variety of potential issues. For example, some words are capitalized, there is punctuation, weird symbols, and numbers. For many NLP methods, we want to normalize the texts to get around these issues. The ‘tm’ package has several built in features for normalizing text. The first step is to load the text into a ‘corpus’ object.</p>
 </div>
-<div id="c.-load-the-text-column-into-a-corpus-object" class="section level4">
-<h4>c. Load the text column into a ‘corpus’ object</h4>
+</div>
+<div id="preprocessing" class="section level1">
+<h1>Preprocessing</h1>
+<div id="a.-load-the-text-column-into-a-corpus-object" class="section level4">
+<h4>a. Load the text column into a ‘corpus’ object</h4>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mycorpus =<span class="st"> </span><span class="kw">Corpus</span>(<span class="kw">VectorSource</span>(data<span class="op">$</span>text))
 <span class="kw">inspect</span>(<span class="kw">head</span>(mycorpus))</code></pre></div>
 <pre><code>## &lt;&lt;SimpleCorpus&gt;&gt;
@@ -206,8 +194,8 @@ Let’s look at the text from the first abstract</p>
 ## [5] The proceedings contain 2300 papers. The topics discussed include: a phase III randomized control trial comparing skin-sparing helical tomotherapy versus 3D-conformal radiation therapy in early-stage breast cancer: acute and late skin toxicity outcomes; longitudinal analysis of patient-reported outcomes and cosmesis in a randomized trial of conventionally fractionated versus hypofractionated whole-breast irradiation; brentuximab vedotin and AVD chemotherapy followed by ISRT: a safe primary treatment regimen for early-stage, unfavorable Hodgkin lymphoma; treatment of early-stage unfavorable Hodgkin lymphoma: efficacy and toxicity of 4 versus 6 cycles of ABVD chemotherapy with radiation; and a prospective pilot study evaluating feasibility and utility of ECG-gated CT angiography for coronary-sparing radiation therapy planning in mediastinal lymphoma.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
 ## [6] The proceedings contain 16 papers. The topics discussed include: tumor treating fields (TTFields)- a novel cancer treatment modality: translating preclinical evidence and engineering into a survival benefit with delayed decline in quality of life; a randomized controlled trial evaluating the utility of a patient decision aid to improve clinical trial (RAVES 08.03) related decision-making; healthcare disparities in cancer patients receiving radiation: changes in insurance status after medicaid expansion under the affordable care act; two-year results for MC1273, a phase 2 evaluation of aggressive dose de-escalation for adjuvant chemoradiation in HPV+ oropharynx squamous cell carcinoma (OPSCC); PACIFIC: a double-blind, placebo-controlled phase 3 study of durvalumab as consolidation therapy after chemoradiation in patients with locally advanced, unresectable nonesmall cell lung cancer; 68Ga-PSMA PET/CT mapping of early biochemical recurrence (PSA1 ng/mL) after primary surgery in 270 patients: impact on salvage radiation therapy planning; prospective validation of transforming growth factor-beta (TGF-B) polymorphism C509T as a predictor of radiation-induced fibrosis in early stage breast cancer; selective bladder preservation with twice-daily radiation plus 5-flourouracil/cisplatin or daily radiation plus gemcitabine for patients with muscle invasive bladder cancer -primary results of NRG/RTOG 0712: a randomized phase 2 multicenter trial; and multi-institutional phase 2 trial of high-dose stereotactic body radiation therapy with temporary hydrogel spacer for low-and intermediate-risk prostate cancer.</code></pre>
 </div>
-<div id="d.-preprocess-the-corpus-object" class="section level4">
-<h4>d. Preprocess the corpus object</h4>
+<div id="b.-preprocess-the-corpus-object" class="section level4">
+<h4>b. Preprocess the corpus object</h4>
 <p>Use the tm_map function to apply a transformation on each element of the corpus object.<br />
 Alternatively use the tm_parLapply function to do the same in parallel.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mycorpus =<span class="st"> </span><span class="kw">tm_map</span>(mycorpus, removePunctuation, <span class="dt">ucp=</span><span class="ot">TRUE</span>)

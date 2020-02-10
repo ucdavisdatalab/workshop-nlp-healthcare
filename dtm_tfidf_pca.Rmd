@@ -6,30 +6,24 @@ output:
    rmdformats::readthedown
 ---
 
-# Objectives for Coding Session
+# Setup
+
+#### a. objectives
 ``` {objective}
-1. Introduce Natural Language Processing 
-2. Introduce the 'tm' package in R 
-3. Explain ways of representing documents so they can be analyzed with computational methods
-4. Demonstrate usage of the corpus and DocumentTermMatrix objects
-5. Explain and demonstrate TF-IDF weighting 
-6. Explain PCA and its applications for corpus exploration
+1. Show how to store and clean text data with the 'tm' package
+2. Introduce Bag of Words representation of documents
+3. Demonstrate how to create and use a DocumentTermMatrix
+4. Explain and demonstrate TF-IDF weighting 
+5. Explain PCA and its applications for corpus exploration
 ```
 
-# Presentation of the data
-
-For this workshop, we are looking at a set of abstracts of medical journal articles related to breast cancer.
-We have 714 abstracts, stored in a csv, with duplicates. 
-We would like to get the key words from each abstract, as well as visualize / check for groupings of abstracts in two dimensions.
-
-# The tm package
+#### b. packages needed
 
 In R, and most programming languages, there are many packages - code written by other people to help with certain tasks. 
-For this workshop we will be using three packages - 'tm', 'readr', and 'ggplot2'.
+For this workshop we will be using two packages - 'tm' and 'ggplot2'.
 The 'tm' - text mining - package has methods for mining text with R including importing data, storing corpora, applying operations on corpora (such as common preprocessing methods), and document term matrices.
 The 'ggplot2' package has functions related to plotting and visualizing data.
 
-#### a. install + load the packages we will use.
 
 Run this command if you don't already have these packages installed.
 ```{r, eval=FALSE}
@@ -41,23 +35,25 @@ Once the packages are installed, load them into your R environment.
 library('tm')
 library('ggplot2')
 ```
-#### b. package help
+
 You can find the documentation for the package [online](https://cran.r-project.org/web/packages/tm/tm.pdf)\
 Within R/RStudio you can browse function documentation with the following syntax.
 ```
 ?TermDocumentMatrix
 ```
 
-# Loading The Data
+#### c. data for this workshop
 
-#### a. Download and load in the data
+For this workshop, we are looking at a set of abstracts of medical journal articles related to breast cancer.
+We have 714 abstracts, stored in a csv, with duplicates. 
+We would like to get the key words from each abstract, as well as visualize / check for groupings of abstracts in two dimensions.\
+
 Now we will load in the abstract data into a csv, using the "read_csv" function from the 'readr' package we installed and loaded earlier. 
 
 ```{r}
 data <- read.csv(url("https://ucdavisdatalab.github.io/workshop-nlp-healthcare/abstracts.csv"))
 ```
 
-#### b. Inspect the data frame
 ```{r}
 head(data)
 ```
@@ -75,13 +71,15 @@ The 'tm' package has several built in features for normalizing text.
 The first step is to load the text into a 'corpus' object.
 
 
-#### c. Load the text column into a 'corpus' object
+# Preprocessing
+
+#### a. Load the text column into a 'corpus' object
 ```{r}
 mycorpus = Corpus(VectorSource(data$text))
 inspect(head(mycorpus))
 ```
 
-#### d.  Preprocess the corpus object
+#### b.  Preprocess the corpus object
 Use the tm_map function to apply a transformation on each element of the corpus object.  
 Alternatively use the tm_parLapply function to do the same in parallel.
 ```{r, warning=FALSE}
