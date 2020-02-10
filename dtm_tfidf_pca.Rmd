@@ -47,7 +47,7 @@ Within R/RStudio you can browse function documentation
 #### a.  Create a 'Corpus' object using the 'tm' package
 The first step is to load the text data into a 'corpus' object.
 ```{r}
-data <- read.csv(url("https://ucdavisdatalab.github.io/workshop-nlp-healthcare/abstracts.csv"))
+data <- read.csv(url("https://ucdavisdatalab.github.io/workshop-nlp-healthcare/abstracts.csv"), stringsAsFactors=FALSE)
 mycorpus = Corpus(VectorSource(data$text))
 ```
 
