@@ -1,5 +1,5 @@
 get_corpus <- function(data, remove=c("")) {
-  newcorpus = Corpus(VectorSource(data2$text))
+  newcorpus = Corpus(VectorSource(data$text))
   newcorpus = tm_map(newcorpus, removePunctuation, ucp=TRUE)
   newcorpus = tm_map(newcorpus, removeNumbers)
   newcorpus = tm_map(newcorpus, tolower)
