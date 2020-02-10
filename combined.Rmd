@@ -114,7 +114,7 @@ NLP models are powerful, but can fail when applied to jargon-heavy, niched domai
 
 # Where to go to learn more
 
-* DataLab's NLP Researcher Toolkit]()
+* [DataLab's NLP Researcher Toolkit](http://datalab.ucdavis.edu/research-toolkit/)
 * [Curated list of ML and NLP resources for healthcare](https://github.com/isaacmg/healthcare_ml)
 * [Post on how NLP can help clinicians](https://tdan.com/natural-language-processing-in-healthcare/24538)
 * [Machine Learning for Healthcare August 2020 Conference at Duke](https://www.mlforhc.org/)
