@@ -8,7 +8,9 @@ output:
 
 # Before we get started
 
-link to lesson plan: [https://ucdavisdatalab.github.io/workshop-nlp-healthcare/](https://ucdavisdatalab.github.io/workshop-nlp-healthcare/)
+link to lesson plan: [https://ucdavisdatalab.github.io/workshop-nlp-healthcare/](https://ucdavisdatalab.github.io/workshop-nlp-healthcare/)\
+link to github repo: [https://github.com/ucdavisdatalab/workshop-nlp-healthcare](https://github.com/ucdavisdatalab/workshop-nlp-healthcare)\
+link to script written by instructors during the coding session Feb 10th: [workshop-script.R](https://ucdavisdatalab.github.io/workshop-nlp-healthcare/workshop-script.R)\
 
 If you will be coding along please check that you have R and RStudio installed on your machine.
 
