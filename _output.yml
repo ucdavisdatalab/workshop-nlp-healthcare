@@ -1,0 +1,13 @@
+bookdown::gitbook:
+  config:
+    toc:
+      before: |
+        <li><a href="https://datalab.ucdavis.edu/">
+        <img src="img/datalab-logo-full-color-rgb.png" style="height: 100%; width: 100%; object-fit: contain" />
+        </a></li>
+      <li><a href="./" style="font-size: 18px">Workshop NLP for Healthcare</a></li>
+      collapse: section
+      sharing: no
+      view: https://github.com/ucdavisdatalab/workshop-nlp-healthcare/blob/main/%s
+      edit: https://github.com/ucdavisdatalab/workshop-nlp-healthcare/edit/main/%s
+

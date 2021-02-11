@@ -1,0 +1,106 @@
+# PCA
+
+#### a. Intuition behind PCA
+The most straightforward way to visualize the information in the TF-IDF matrix is to plot its columns, but this is unsatisfactory because there are thousands of them, and each column is mostly zeroes (so contains little information):
+
+```{r}
+plot(as.matrix(tfidf_dtm[, 1:2]))
+```
+
+Our answer is to use principal components analysis (PCA), which rotates the big matrix until we are "looking" down the "direction" (or component) with the most variability. The result is another matrix of equal size to the first, but each column contains information from all of the columns of the original matrix, and they are sorted so that the most important columns are first. We can observe get the most important relationships by focusing on just a few of these "principal components". Let's continue with our example:
+
+#### b. Computing PCA 
+
+```{r}
+articles <- t(tfidf_dtm)
+mypca <- prcomp(articles, center=TRUE, scale=TRUE)
+```
+
+#### c. Plotting the abstracts
+
+Add the principal components to the original data:
+
+```{r}
+plotdata <- cbind(data, mypca$rotation)
+```
+
+And now plot the abstracts. Each dot in the figure represents one abstract.
+
+```{r}
+ggplot(plotdata) + aes(x=PC1, y=PC2) + geom_point()
+```
+
+Now let's identify some articles from the plot. 
+
+```{r}
+min_index <- order(plotdata$PC1, decreasing=FALSE)
+max_index <- order(plotdata$PC1, decreasing=TRUE)
+
+# view the most divergent titles:
+plotdata$title[min_index[1:6]]
+plotdata$title[max_index[1:6]]
+```
+
+Visualize the explained variance. This is the metric that PCA uses to decide which components are the most important.
+
+```{r}
+plot(100 * cumsum(mypca$sdev^2) / sum(mypca$sdev^2), type='l', bty='n', ylab="% total variance explained", xlab="Number of components")
+```
+
+Let's add some additional information: a few top terms from each abstract. These are the most characeristic terms from the abstract, as ranked by TF-IDF. We'll plot the abstracts on the 2nd and 3rd principal components, annotated by the top terms.
+
+```{r}
+source(url("https://ucdavisdatalab.github.io/workshop-nlp-healthcare/top_terms.R"))
+plotdata[['top_terms']] <- top_terms(tfidf_dtm)
+ggplot(plotdata) + aes(x=PC2, y=PC3, label=top_terms) + geom_text(check_overlap=TRUE)
+```
+
+We're also going to look at k-means to identify clusters in data. To begin, let's include some abstracts dealing with cervical cancer from the same journals as the breast cancer abstracts.
+
+```{r import-cervical-abstracts}
+cervical <- read.csv(url("https://ucdavisdatalab.github.io/workshop-nlp-healthcare/cervical-abstracts.csv"))
+data[["topic"]] <- "breast"
+cervical[["topic"]] <- "cervical"
+combined <- rbind(data, cervical)
+```
+
+Rather than processing the combined abstracts step-by-step, let's grab a function to replicate the processing we did on the breast cancer abstracts. This time, though, the terms "breast" "cervical", and "cervix" will be removed prior to the analysis.
+
+```{r, warning=FALSE}
+source(url("https://ucdavisdatalab.github.io/workshop-nlp-healthcare/get_corpus.R"))
+pca_combined <- get_corpus(combined, remove=c("cervical", "cervix", "breast"))
+data_combined <- cbind(combined, pca_combined$rotation)
+```
+
+We now have a PCA of the combined abstracts, so let's see how the first few components look:
+
+```{r}
+ggplot(data_combined) + aes(x=PC1, y=PC2, color=topic) + geom_point()
+ggplot(data_combined) + aes(x=PC2, y=PC3, color=topic) + geom_point()
+```
+
+If we didn't know the correct labels, we can let the computer pick them itself. One commonly-used method that's built into R is k-means classification. K-means identifies clusters in data based on maximizing the similarity within groups while maximizing the dissimilarity between groups. It is often best to use PCA for dimension-reduction before applying PCA because separation between points increases with the square of the number of dimensions, and that separation makes clustering less effective. Here I will be quite aggressive and use only three principal components.
+
+```{r k-means}
+km <- kmeans(pca_combined$rotation[, 1:3], 2, iter.max=1e3, nstart=100)
+km_fit <- fitted(km, method="classes")
+data_combined[["group_fit"]] <- as.factor(km_fit)
+
+ggplot(data_combined) + aes(x=PC2, y=PC3, color=group_fit) + geom_point()
+```
+
+Another way to explore the result of k-means is to look at the articles that are most characteristic of each cluster. First, calculate the sum of squared residuals for each article.
+
+```{r}
+km_residual <- pca_combined$rotation[, 1:3] - fitted(km)
+km_ss_residual <- apply(km_residual, 1, var)
+data_combined[["err"]] <- km_ss_residual
+```
+
+Now we can identify the articles within each group that have the smallest residuals. These are closest to the group center, and thus most characteristic of the group.
+
+```{r}
+data_ordered <- data_combined[order(data_combined[["err"]]),]
+head(data_ordered[["title"]][data_ordered[["group_fit"]] == 1])
+head(data_ordered[["title"]][data_ordered[["group_fit"]] == 2])
+```

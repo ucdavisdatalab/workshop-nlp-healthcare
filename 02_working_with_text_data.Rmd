@@ -1,0 +1,188 @@
+# Working with Text Data in R
+
+### packages needed for workshop
+
+In R, and most programming languages, there are many packages - code written by other people to help with certain tasks. 
+For this workshop we will be using two packages - 'tm' and 'ggplot2'.
+The 'tm' - text mining - package has methods for mining text with R including importing data, storing corpora, applying operations on corpora (such as common preprocessing methods), and document term matrices.
+The 'ggplot2' package has functions related to plotting and visualizing data.
+
+
+Run this command if you don't already have these packages installed.
+```{r, eval=FALSE}
+install.packages('tm')
+install.packages('ggplot2')
+install.packages('Matrix')
+```
+
+Once the packages are installed, load them into your R environment.
+```{r, message=FALSE}
+library('tm')
+library('ggplot2')
+library('Matrix')
+```
+
+You can find the documentation for the package [online](https://cran.r-project.org/web/packages/tm/tm.pdf)\
+Within R/RStudio you can browse function documentation with the following syntax.
+```
+?TermDocumentMatrix
+```
+
+###  data for this workshop
+
+For this workshop, we are looking at a set of abstracts of medical journal articles related to breast cancer.
+We have 714 abstracts, stored in a csv, with duplicates. 
+We would like to get the key words from each abstract, as well as visualize / check for groupings of abstracts in two dimensions.\
+
+
+```{r}
+data <- read.csv(url("https://ucdavisdatalab.github.io/workshop-nlp-healthcare/abstracts.csv"), stringsAsFactors=FALSE)
+```
+
+```{r}
+head(data)
+```
+We have a dataframe with 714 rows, each row referring to a different abstract. 
+For each abstract we have the authors, year published, title of the paper, name of the journal, and the full text.
+
+Let's look at the text from the first abstract
+```{r}
+data$text[[1]]
+```
+Notice that within the text there are a variety of potential issues. 
+For example, some words are capitalized, there is punctuation, weird symbols, and numbers. 
+For many NLP methods, we want to normalize the texts to get around these issues. 
+The 'tm' package has several built in features for normalizing text. 
+The first step is to load the text into a 'corpus' object.
+
+
+## Preprocessing
+
+###  Load the text column into a 'corpus' object
+```{r}
+mycorpus <- Corpus(VectorSource(data$text))
+inspect(head(mycorpus))
+```
+
+###  Preprocess the corpus object
+Use the tm_map function to apply a transformation on each element of the corpus object.  
+Alternatively use the tm_parLapply function to do the same in parallel.
+```{r, warning=FALSE}
+mycorpus <- tm_map(mycorpus, tolower)
+mycorpus <- tm_map(mycorpus, removePunctuation, ucp=TRUE)
+mycorpus <- tm_map(mycorpus, removeNumbers)
+mycorpus <- tm_map(mycorpus, removeWords, stopwords("en")) 
+```
+
+Now that we have normalized the text, lets look at the first abstract again.
+```{r}
+mycorpus[[1]]$content
+```
+
+It looks 'normalized' but how do we model this? how do we apply NLP algorithms on it?
+
+## The Bag of Words Representation
+
+Consider: \
+what is a text document to a computer?  \
+What can it do with a sequence of characters? \  
+
+In order for us to apply statistical methods on a document, we need a representation of texts that is easy for a computer to process, but still encodes information related to that text's content.
+One such representation is the Bag of Words format.\
+
+Bag of Words is a way of representing a document that encodes a document as a 'bag' of its tokens.
+The document is represented as the words that appeared in the document and the number of times those words appeared.
+All information about word order is lost in this representation, however, for many NLP methods, this is still an effective representation of the content of the document.\
+
+![bag of words image](./img/bow.png)
+
+The power of the bag of words representation is that each document can be represented in the same vector space.
+We do so by defining the vector dimensions to reflect the vocabulary across all the documents.
+The vectors can then be merged into a matrix called a Document Term Matrix.
+
+![dtm image](./img/dtm.png)
+
+
+## The Document Term Matrix
+
+In brief, a Document Term Matrix:  
+  - each document is represented by a set of tokens and their counts  
+  - the order of tokens is not encoded in this representation  
+  - the basis of many text processing methods, including document classification and topic modeling  
+
+In R we can use a DocumentTermMatrix function from the 'tm' package to create this structure from our corpus.  
+
+### Creating a Document Term Matrix from the corpus object    
+From the 'corpus' object we can create a document term matrix.
+```{r}
+mydtm <- DocumentTermMatrix(mycorpus)
+```
+Note: the DocumentTermMatrix automatically sets all the characters to lower case.
+
+### Exploring with a DTM  
+
+A useful tool is the inspect function from the 'tm' package.
+```{r}
+inspect(mydtm)
+```
+
+From this format it we can find word counts and document lengths.
+```{r}
+document_lengths <- rowSums(as.matrix(mydtm))
+word_counts <- colSums(as.matrix(mydtm))
+```
+
+We can get a sorted list of the biggest documents.
+```{r}
+sorted_document_lengths <- sort(document_lengths, decreasing=TRUE)
+barplot(sorted_document_lengths[1:10], col = "tan", las = 2)
+```
+Or a sorted list of words and their frequencies.
+```{r}
+sorted_word_counts <- sort(word_counts, decreasing=TRUE)
+barplot(sorted_word_counts[1:10], col = "tan", las = 2)
+```
+
+## TF-IDF
+
+TF-IDF stands for term frequency-inverse document frequency. 
+It is a VERY popular method for finding documents relevant to a users search term. 
+It can also be used as an effective (often times better than simple bag of words) representation of documents for statistical modeling of documents in a corpus. 
+
+### Intuition behind TF-IDF
+
+TF-IDF combines two attributes that may signal a words importance in a document into a single metric. 
+The first is the 'term frequency (TF)' - how often the word appeared within that document. 
+It makes intuitive sense that if a word appears many times in a document, that the document is about something related to that term.
+The second attribute is the 'inverse document frequency (IDF)' - a measure of what proportion of the documents the word appeared in. If a word appears in all documents, its weight should be reduced. 
+Conversely, if a word appears only in few documents, it should be highly weighted for those documents. 
+
+### TF-IDF formula
+
+```
+tfidf(t,d,D) = tf(t,d) * idf(t,D)
+```
+Where, tf(t,d) is a function of a terms(t) frequency for a given document(d). 
+And, idf(t,D) is the inverse function of a terms(t) appearance across all the documents(D).  There are many variations of functions for tf(t,d) and idf(t,D) that can be used for computing TF-IDF.  
+
+
+### TF-IDF from DTM
+Create tf-idf weighted DTM in R
+```{r}
+tfidf_dtm <- weightTfIdf(mydtm, normalize=TRUE) 
+```
+
+Inspect the new dtm
+```{r}
+inspect(tfidf_dtm)
+```
+
+Compare the tfidf representation with the tf representation for a single abstract
+```{r}
+tf_doc10 <- as.matrix(mydtm[10,])
+tf <- colSums(tf_doc10)
+tfidf_doc10 <- as.matrix(tfidf_dtm[10,])
+tfidf <- colSums(tfidf_doc10)
+barplot(sort(tf, decreasing=TRUE)[1:10], col = "tan", las = 2)
+barplot(sort(tfidf, decreasing=TRUE)[1:10], col = "tan", las = 2)
+```
