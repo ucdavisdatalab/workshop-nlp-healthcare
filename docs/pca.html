@@ -136,6 +136,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="https://datalab.ucdavis.edu/">
 <img src="img/datalab-logo-full-color-rgb.png" style="height: 100%; width: 100%; object-fit: contain" />
 </a></li>
+<li><a href="./" style="font-size: 18px">Workshop NLP for Healthcare</a></li>
 
 <li class="divider"></li>
 <li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Overview</a>
@@ -240,7 +241,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="pca.html#cb35-1" aria-hidden="true"></a><span class="kw">plot</span>(<span class="dv">100</span> <span class="op">*</span><span class="st"> </span><span class="kw">cumsum</span>(mypca<span class="op">$</span>sdev<span class="op">^</span><span class="dv">2</span>) <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(mypca<span class="op">$</span>sdev<span class="op">^</span><span class="dv">2</span>), <span class="dt">type=</span><span class="st">&#39;l&#39;</span>, <span class="dt">bty=</span><span class="st">&#39;n&#39;</span>, <span class="dt">ylab=</span><span class="st">&quot;% total variance explained&quot;</span>, <span class="dt">xlab=</span><span class="st">&quot;Number of components&quot;</span>)</span></code></pre></div>
 <p><img src="03_pca_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
 <p>Let’s add some additional information: a few top terms from each abstract. These are the most characeristic terms from the abstract, as ranked by TF-IDF. We’ll plot the abstracts on the 2nd and 3rd principal components, annotated by the top terms.</p>
-<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="pca.html#cb36-1" aria-hidden="true"></a><span class="kw">source</span>(<span class="kw">url</span>(<span class="st">&quot;https://ucdavisdatalab.github.io/workshop-nlp-healthcare/top_terms.R&quot;</span>))</span>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="pca.html#cb36-1" aria-hidden="true"></a><span class="co">#source(url(&quot;https://ucdavisdatalab.github.io/workshop-nlp-healthcare/top_terms.R&quot;))</span></span>
 <span id="cb36-2"><a href="pca.html#cb36-2" aria-hidden="true"></a>plotdata[[<span class="st">&#39;top_terms&#39;</span>]] &lt;-<span class="st"> </span><span class="kw">top_terms</span>(tfidf_dtm)</span>
 <span id="cb36-3"><a href="pca.html#cb36-3" aria-hidden="true"></a><span class="kw">ggplot</span>(plotdata) <span class="op">+</span><span class="st"> </span><span class="kw">aes</span>(<span class="dt">x=</span>PC2, <span class="dt">y=</span>PC3, <span class="dt">label=</span>top_terms) <span class="op">+</span><span class="st"> </span><span class="kw">geom_text</span>(<span class="dt">check_overlap=</span><span class="ot">TRUE</span>)</span></code></pre></div>
 <p><img src="03_pca_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
@@ -250,7 +251,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb37-3"><a href="pca.html#cb37-3" aria-hidden="true"></a>cervical[[<span class="st">&quot;topic&quot;</span>]] &lt;-<span class="st"> &quot;cervical&quot;</span></span>
 <span id="cb37-4"><a href="pca.html#cb37-4" aria-hidden="true"></a>combined &lt;-<span class="st"> </span><span class="kw">rbind</span>(data, cervical)</span></code></pre></div>
 <p>Rather than processing the combined abstracts step-by-step, let’s grab a function to replicate the processing we did on the breast cancer abstracts. This time, though, the terms “breast” “cervical”, and “cervix” will be removed prior to the analysis.</p>
-<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="pca.html#cb38-1" aria-hidden="true"></a><span class="kw">source</span>(<span class="kw">url</span>(<span class="st">&quot;https://ucdavisdatalab.github.io/workshop-nlp-healthcare/get_corpus.R&quot;</span>))</span>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="pca.html#cb38-1" aria-hidden="true"></a><span class="co">#source(url(&quot;https://ucdavisdatalab.github.io/workshop-nlp-healthcare/get_corpus.R&quot;))</span></span>
 <span id="cb38-2"><a href="pca.html#cb38-2" aria-hidden="true"></a>pca_combined &lt;-<span class="st"> </span><span class="kw">get_corpus</span>(combined, <span class="dt">remove=</span><span class="kw">c</span>(<span class="st">&quot;cervical&quot;</span>, <span class="st">&quot;cervix&quot;</span>, <span class="st">&quot;breast&quot;</span>))</span>
 <span id="cb38-3"><a href="pca.html#cb38-3" aria-hidden="true"></a>data_combined &lt;-<span class="st"> </span><span class="kw">cbind</span>(combined, pca_combined<span class="op">$</span>rotation)</span></code></pre></div>
 <p>We now have a PCA of the combined abstracts, so let’s see how the first few components look:</p>
@@ -309,40 +310,27 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <script>
 gitbook.require(["gitbook"], function(gitbook) {
 gitbook.start({
-"sharing": {
-"github": false,
-"facebook": true,
-"twitter": true,
-"linkedin": false,
-"weibo": false,
-"instapaper": false,
-"vk": false,
-"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
-},
+"sharing": false,
 "fontsettings": {
 "theme": "white",
 "family": "sans",
 "size": 2
 },
 "edit": {
-"link": null,
-"text": null
+"link": "https://github.com/ucdavisdatalab/workshop-nlp-healthcare/edit/main/03_pca.Rmd",
+"text": "Edit"
 },
 "history": {
 "link": null,
 "text": null
 },
 "view": {
-"link": null,
+"link": "https://github.com/ucdavisdatalab/workshop-nlp-healthcare/blob/main/03_pca.Rmd",
 "text": null
 },
 "download": null,
 "toc": {
-"collapse": "section",
-"<li><a href="./" style="font-size": "18px">Workshop NLP for Healthcare</a></li>",
-"sharing": false,
-"view": "https://github.com/ucdavisdatalab/workshop-nlp-healthcare/blob/main/%s",
-"edit": "https://github.com/ucdavisdatalab/workshop-nlp-healthcare/edit/main/%s"
+"collapse": "section"
 }
 });
 });

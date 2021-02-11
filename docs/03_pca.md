@@ -84,7 +84,7 @@ Let's add some additional information: a few top terms from each abstract. These
 
 
 ```r
-source(url("https://ucdavisdatalab.github.io/workshop-nlp-healthcare/top_terms.R"))
+#source(url("https://ucdavisdatalab.github.io/workshop-nlp-healthcare/top_terms.R"))
 plotdata[['top_terms']] <- top_terms(tfidf_dtm)
 ggplot(plotdata) + aes(x=PC2, y=PC3, label=top_terms) + geom_text(check_overlap=TRUE)
 ```
@@ -105,7 +105,7 @@ Rather than processing the combined abstracts step-by-step, let's grab a functio
 
 
 ```r
-source(url("https://ucdavisdatalab.github.io/workshop-nlp-healthcare/get_corpus.R"))
+#source(url("https://ucdavisdatalab.github.io/workshop-nlp-healthcare/get_corpus.R"))
 pca_combined <- get_corpus(combined, remove=c("cervical", "cervix", "breast"))
 data_combined <- cbind(combined, pca_combined$rotation)
 ```

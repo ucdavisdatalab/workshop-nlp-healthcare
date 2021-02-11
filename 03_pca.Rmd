@@ -50,7 +50,7 @@ plot(100 * cumsum(mypca$sdev^2) / sum(mypca$sdev^2), type='l', bty='n', ylab="% 
 Let's add some additional information: a few top terms from each abstract. These are the most characeristic terms from the abstract, as ranked by TF-IDF. We'll plot the abstracts on the 2nd and 3rd principal components, annotated by the top terms.
 
 ```{r}
-source(url("https://ucdavisdatalab.github.io/workshop-nlp-healthcare/top_terms.R"))
+#source(url("https://ucdavisdatalab.github.io/workshop-nlp-healthcare/top_terms.R"))
 plotdata[['top_terms']] <- top_terms(tfidf_dtm)
 ggplot(plotdata) + aes(x=PC2, y=PC3, label=top_terms) + geom_text(check_overlap=TRUE)
 ```
@@ -67,7 +67,7 @@ combined <- rbind(data, cervical)
 Rather than processing the combined abstracts step-by-step, let's grab a function to replicate the processing we did on the breast cancer abstracts. This time, though, the terms "breast" "cervical", and "cervix" will be removed prior to the analysis.
 
 ```{r, warning=FALSE}
-source(url("https://ucdavisdatalab.github.io/workshop-nlp-healthcare/get_corpus.R"))
+#source(url("https://ucdavisdatalab.github.io/workshop-nlp-healthcare/get_corpus.R"))
 pca_combined <- get_corpus(combined, remove=c("cervical", "cervix", "breast"))
 data_combined <- cbind(combined, pca_combined$rotation)
 ```
