@@ -1,7 +1,7 @@
 ---
 title: NLP for Healthcare
 author: [Dr. Pamela Reynolds, Dr. Wesley Brooks, Arthur Koehl]
-date: "2021-02-11"
+date: "2021-02-12"
 url: "https://ucdavisdatalab.github.io/workshop-nlp-healthcare"
 site: bookdown::bookdown_site
 knit: "bookdown::render_book"

@@ -25,7 +25,10 @@ tf-idf
 intuition-behind-tf-idf
 tf-idf-formula
 tf-idf-from-dtm
-pca
-a.-intuition-behind-pca
-b.-computing-pca
-c.-plotting-the-abstracts
+exploratory-data-analysis
+principal-components-analysis
+check-the-tf-idf-matrix
+compute-pca
+plot-the-abstracts
+examine-how-principal-components-sort-the-documents
+interpreting-pca
