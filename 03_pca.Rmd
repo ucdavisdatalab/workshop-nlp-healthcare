@@ -104,7 +104,7 @@ ggplot(plotdata) + aes(x=PC2, y=PC3, label=top_terms) + geom_text(check_overlap=
 
 We've seen the patterns that align with the first, second, and third principal components. What makes these principal components the first, second, and third? The PCs are ranked by the amount of total variance in the TF-IDF matrix that they explain. So the first principal component is aligned with the strongest signal in term frequency, and the second is aligned with the strongest signal that's left over after accounting for the first component, and so on. The strength of signal is quantified by the proportion of variance in the TF-IDF matrix that is explained by each principal component. In order to see how the strength of signal changes along the sequence of PCs, we can visualize the cumulative percent of variance explained.
 
-```{r}
+```{r plot-variance-explained}
 plot(100 * cumsum(pca$sdev^2) / sum(pca$sdev^2), type='l', bty='n',
     ylab="% total variance explained", xlab="Number of components")
 ```

@@ -194,4 +194,4 @@ plot(100 * cumsum(pca$sdev^2) / sum(pca$sdev^2), type='l', bty='n',
     ylab="% total variance explained", xlab="Number of components")
 ```
 
-<img src="03_pca_files/figure-html/unnamed-chunk-4-1.png" width="672" />
+<img src="03_pca_files/figure-html/plot-variance-explained-1.png" width="672" />
