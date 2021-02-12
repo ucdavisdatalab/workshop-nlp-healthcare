@@ -41,15 +41,19 @@ Working with  Blaisdell Medical Library's health librarian Amy Studer, we conduc
 ["R"](https://www.r-project.org/) is a programming language and statistical software that interprets scripts. [RStudio](https://rstudio.com/) is an Integrated Development Environment (IDE) for working with R. You need R installed in order to use RStudio, but you don't need RStudio to work with R.
 
 *So why R?*
-* Faciliates reproducible research workflows
+
+Faciliates reproducible research workflows
+
     - integrates with other tools. 
     - designed for data analysis
     - produces high-quality graphics
-* It's extensible and interdisciplinary
+
+It's extensible and interdisciplinary
+
     - free, open-source, well-documented, and cross-platform
     - runs on Mac, PC and Linux. 
     - works with data of all shapes and sizes.
     - large library of external packages available for performing diverse tasks, including text mining and NLP.
-* Large (and growing) community
+    - Large (and growing) community
  
 *Should you use R?* Maybe. Use whatever langauge allows you to perform your work and faciliates sharing with your direct colleagues and the broader reserach community. 
