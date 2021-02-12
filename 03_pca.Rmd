@@ -1,106 +1,110 @@
-# PCA
+# Exploratory data analysis
+Having now imported the data as a TF-IDF matrix, we aree able to begin with some exploratory data analysis. The analysis can help us to understand patterns in the big stack of abstracts about breast cancer. It won't tell us much about any particular one of the abstracts - remember that we've reduced each one to a vector of term frequencies so as a text document each abstract has been stripped of meaning. But we are going to be able to identify large-scale patterns in the collection of abstracts much more quickly than if we had to read each one.
 
-#### a. Intuition behind PCA
-The most straightforward way to visualize the information in the TF-IDF matrix is to plot its columns, but this is unsatisfactory because there are thousands of them, and each column is mostly zeroes (so contains little information):
+## Principal components analysis
+Principal components analysis, which will be abbreviated PCA, is a method used in exploratory data analysis for multidimensional data. That's what we're working with, since the 8180 columns of the TF-IDF matrix are more than we could possibly explore on a column-by-column basis.
 
-```{r}
-plot(as.matrix(tfidf_dtm[, 1:2]))
+### Check the TF-IDF matrix
+Not only are there too many columns to work through individually, but also each column is mostly zeroes. As a result an individual column of the TF-IDF matrix doesn't contain much information. This makes sense if you consider consider how much you would learn about books published in 2020 by counting the number of times each one used ther word "whale". Here's an example. 
+
+```{r plot-tfidf}
+# first, convert the TF-IDF to a dense matrix
+tfmat = as.matrix( tfidf_dtm )
+
+# identify the first term and plot its histogram
+hist( tfmat[, 1], main=paste0( 'uses of "', colnames( tfmat )[[1]], '"' ))
+
+# identify the second term and plot its histgram
+hist( tfmat[, 2], main=paste0( 'uses of "', colnames( tfmat )[[2]], '"' ))
+
+# plot the first two columns 
+plot( as.matrix(tfidf_dtm[, 1:2]), bty='n', main=paste0( 'joint uses of "',
+  colnames( tfmat )[[1]], '" and "', colnames( tfmat )[[2]], '"') )
 ```
 
-Our answer is to use principal components analysis (PCA), which rotates the big matrix until we are "looking" down the "direction" (or component) with the most variability. The result is another matrix of equal size to the first, but each column contains information from all of the columns of the original matrix, and they are sorted so that the most important columns are first. We can observe get the most important relationships by focusing on just a few of these "principal components". Let's continue with our example:
+### Compute PCA 
+Since the individual columns don't convey much information, PCA rotates the big matrix until we are "looking" down the "direction" (or component) with the most variability. The result is another matrix of equal size to the first, but each column contains information from all of the columns of the original matrix, and they are sorted so that the columns with the most variability are first. This will take your computer several seconds to calculate.
 
-#### b. Computing PCA 
+```{r pca-calc}
+# rotate the TF-IDF so the columns are articles
+articles = t( tfmat )
 
-```{r}
-articles <- t(tfidf_dtm)
-mypca <- prcomp(articles, center=TRUE, scale=TRUE)
+# calculate PCA on the rotated TF-IDF
+pca = prcomp(articles, center=TRUE, scale=TRUE)
+
+# extract the matrix of rotations
+pcmat = as.data.frame( pca$rotation )
 ```
 
-#### c. Plotting the abstracts
-
-Add the principal components to the original data:
+### Plot the abstracts
+We can now look at a plot of the first two principal components to see how it contains more information than the first columns of the TF-IDF matrix.
 
 ```{r}
-plotdata <- cbind(data, mypca$rotation)
+# plot the first two principal components
+with( pcmat, plot(PC1, PC2) )
 ```
 
-And now plot the abstracts. Each dot in the figure represents one abstract.
+
+Unlike the TF-IDF, the x and y axes here have no inherent meaning, but they are aligned with the greatest variability in the data. So by inspecting the articles that are at the extremes, we can begin to understand the strongest signals that PCA detected in the articles.
+
+### Examine how principal components sort the documents
+
 
 ```{r}
-ggplot(plotdata) + aes(x=PC1, y=PC2) + geom_point()
+# identify the order of documents along the first principal component
+indx <- order( pcmat$PC1 )
+
+# view the titles at the extremes of the first principal component
+data$title[ head(indx) ]
+data$title[ tail(indx) ]
 ```
 
-Now let's identify some articles from the plot. 
+It seems that the PCA has detected a pattern in term usage that distinguishes between papers on one extreme that make comparisons between whole- and partial-breast radiation therapy, and papers on the other extreme that are mostly about molecular biology. This is kind of impressive when you consider that the computer did it without any human input about what language might be relevant to medicine or biology. Let's look at how some other principal components are separating the documents.
 
-```{r}
-min_index <- order(plotdata$PC1, decreasing=FALSE)
-max_index <- order(plotdata$PC1, decreasing=TRUE)
+```{r second-pc}
+# identify the order of documents along the second principal component
+indx = order( pcmat$PC2 )
 
-# view the most divergent titles:
-plotdata$title[min_index[1:6]]
-plotdata$title[max_index[1:6]]
+# observe which papers are at the extremes of the second PC
+data$title[ head(indx) ]
+data$title[ tail(indx) ]
 ```
 
-Visualize the explained variance. This is the metric that PCA uses to decide which components are the most important.
+With the second principal component, we see a separation between papers about breast-conserving therapy at one extreme and papers about hypofractionated, conformal, or modulated radiation therapy at the other extreme.
 
-```{r}
-plot(100 * cumsum(mypca$sdev^2) / sum(mypca$sdev^2), type='l', bty='n', ylab="% total variance explained", xlab="Number of components")
+```{r third-pc}
+# identify the order of documents along the third principal component
+indx = order( pcmat$PC3 )
+
+# observe which papers are at the extremes of the second PC
+data$title[ head(indx) ]
+data$title[ tail(indx) ]
 ```
 
-Let's add some additional information: a few top terms from each abstract. These are the most characeristic terms from the abstract, as ranked by TF-IDF. We'll plot the abstracts on the 2nd and 3rd principal components, annotated by the top terms.
+At one extreme of the third principal component are articles about intraoperative radiation therapy and at the other extreme are articles about radiation dosimetry, especially with respect to modulated and conformal radiation therapy.
+
+### Interpreting PCA
+It looks like there are patterns of actual meaning arising from the PCA. We're not talking here about statistical significance or clinical importance. It is still for humans to decide what patterns have clinical importance. Here, PCA is a shortcut that allows us to identify some patterns in articles about breast cancer radiation therapy without having to read all of the articles. All of the patterns I've cited are based on patterns of word usage, and yet it appears that those patterns in word usage actually map onto distinctions with real-world meaning. So keep in mind that the principal components are only identifying patterns in term frequencies but the PCA is useful only when those terms map onto real-world meaning.
+
+So far, we've looked at the most extreme documents along some principal components. If you want to see more than a few documents at a time, or see how documents align jointly on two principal components, then you want to do a scatterplot of the top terms of each document. I'll show you how, but it uses a function called `top_terms()` that needs to be loaded from our Github repository (it's too complex to live-code).
 
 ```{r}
-#source(url("https://ucdavisdatalab.github.io/workshop-nlp-healthcare/top_terms.R"))
-plotdata[['top_terms']] <- top_terms(tfidf_dtm)
+# load the function for identifying top terms in documents
+source(url("https://ucdavisdatalab.github.io/workshop-nlp-healthcare/top_terms.R"))
+
+# cbind data and the PCA rotation
+plotdata <- cbind(data, pcmat)
+
+# identify top terms for each document and attach them to the plotdata
+plotdata[[ 'top_terms' ]] <- top_terms( tfidf_dtm )
+
+# visualize the top principal components in terms of top terms
 ggplot(plotdata) + aes(x=PC2, y=PC3, label=top_terms) + geom_text(check_overlap=TRUE)
 ```
 
-We're also going to look at k-means to identify clusters in data. To begin, let's include some abstracts dealing with cervical cancer from the same journals as the breast cancer abstracts.
-
-```{r import-cervical-abstracts}
-cervical <- read.csv(url("https://ucdavisdatalab.github.io/workshop-nlp-healthcare/cervical-abstracts.csv"))
-data[["topic"]] <- "breast"
-cervical[["topic"]] <- "cervical"
-combined <- rbind(data, cervical)
-```
-
-Rather than processing the combined abstracts step-by-step, let's grab a function to replicate the processing we did on the breast cancer abstracts. This time, though, the terms "breast" "cervical", and "cervix" will be removed prior to the analysis.
-
-```{r, warning=FALSE}
-#source(url("https://ucdavisdatalab.github.io/workshop-nlp-healthcare/get_corpus.R"))
-pca_combined <- get_corpus(combined, remove=c("cervical", "cervix", "breast"))
-data_combined <- cbind(combined, pca_combined$rotation)
-```
-
-We now have a PCA of the combined abstracts, so let's see how the first few components look:
+We've seen the patterns that align with the first, second, and third principal components. What makes these principal components the first, second, and third? The PCs are ranked by the amount of total variance in the TF-IDF matrix that they explain. So the first principal component is aligned with the strongest signal in term frequency, and the second is aligned with the strongest signal that's left over after accounting for the first component, and so on. The strength of signal is quantified by the proportion of variance in the TF-IDF matrix that is explained by each principal component. In order to see how the strength of signal changes along the sequence of PCs, we can visualize the cumulative percent of variance explained.
 
 ```{r}
-ggplot(data_combined) + aes(x=PC1, y=PC2, color=topic) + geom_point()
-ggplot(data_combined) + aes(x=PC2, y=PC3, color=topic) + geom_point()
-```
-
-If we didn't know the correct labels, we can let the computer pick them itself. One commonly-used method that's built into R is k-means classification. K-means identifies clusters in data based on maximizing the similarity within groups while maximizing the dissimilarity between groups. It is often best to use PCA for dimension-reduction before applying PCA because separation between points increases with the square of the number of dimensions, and that separation makes clustering less effective. Here I will be quite aggressive and use only three principal components.
-
-```{r k-means}
-km <- kmeans(pca_combined$rotation[, 1:3], 2, iter.max=1e3, nstart=100)
-km_fit <- fitted(km, method="classes")
-data_combined[["group_fit"]] <- as.factor(km_fit)
-
-ggplot(data_combined) + aes(x=PC2, y=PC3, color=group_fit) + geom_point()
-```
-
-Another way to explore the result of k-means is to look at the articles that are most characteristic of each cluster. First, calculate the sum of squared residuals for each article.
-
-```{r}
-km_residual <- pca_combined$rotation[, 1:3] - fitted(km)
-km_ss_residual <- apply(km_residual, 1, var)
-data_combined[["err"]] <- km_ss_residual
-```
-
-Now we can identify the articles within each group that have the smallest residuals. These are closest to the group center, and thus most characteristic of the group.
-
-```{r}
-data_ordered <- data_combined[order(data_combined[["err"]]),]
-head(data_ordered[["title"]][data_ordered[["group_fit"]] == 1])
-head(data_ordered[["title"]][data_ordered[["group_fit"]] == 2])
+plot(100 * cumsum(pca$sdev^2) / sum(pca$sdev^2), type='l', bty='n',
+    ylab="% total variance explained", xlab="Number of components")
 ```
