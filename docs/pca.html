@@ -276,19 +276,19 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Now we can identify the articles within each group that have the smallest residuals. These are closest to the group center, and thus most characteristic of the group.</p>
 <div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="pca.html#cb44-1" aria-hidden="true"></a>data_ordered &lt;-<span class="st"> </span>data_combined[<span class="kw">order</span>(data_combined[[<span class="st">&quot;err&quot;</span>]]),]</span>
 <span id="cb44-2"><a href="pca.html#cb44-2" aria-hidden="true"></a><span class="kw">head</span>(data_ordered[[<span class="st">&quot;title&quot;</span>]][data_ordered[[<span class="st">&quot;group_fit&quot;</span>]] <span class="op">==</span><span class="st"> </span><span class="dv">1</span>])</span></code></pre></div>
-<pre><code>## [1] &quot;Analysis of the Financial Impact of the 2018 ASTRO Breast Dose-Fractionation Guidelines on Radiation Oncology Departmental Reimbursement.&quot;                   
-## [2] &quot;Patterns of breast recurrence in a pilot study of brachytherapy confined to the lumpectomy site for early breast cancer with six years&#39; minimum follow-up.&quot;  
-## [3] &quot;Long-term radiation complications following conservative surgery (CS) and radiation therapy (RT) in patients with early stage breast cancer.&quot;                
-## [4] &quot;Treatment-related toxicity from a randomized trial of the sequencing of doxorubicin and radiation therapy in patients treated for early stage breast cancer.&quot;
-## [5] &quot;Local recurrence and survival for the german centers in the targit-a (targeted intraoperative radiation therapy-alone) trial.&quot;                               
-## [6] &quot;Sphere of Equivalence-A Novel Target Volume Concept for Intraoperative Radiotherapy Using Low-Energy X Rays.&quot;</code></pre>
-<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="pca.html#cb46-1" aria-hidden="true"></a><span class="kw">head</span>(data_ordered[[<span class="st">&quot;title&quot;</span>]][data_ordered[[<span class="st">&quot;group_fit&quot;</span>]] <span class="op">==</span><span class="st"> </span><span class="dv">2</span>])</span></code></pre></div>
 <pre><code>## [1] &quot;Screening for wart virus infection in normal and abnormal cervices by DNA hybridisation of cervical scrapes.&quot;                                                  
 ## [2] &quot;Viral load of human papillomavirus and risk of CIN3 or cervical cancer.&quot;                                                                                       
 ## [3] &quot;Progressive potential of mild cervical atypia: prospective cytological, colposcopic, and virological study.&quot;                                                   
 ## [4] &quot;Relation between human papillomavirus type 16 and potential for progression of minor-grade cervical disease.&quot;                                                  
 ## [5] &quot;HPV 16 DNA in normal and malignant cervical epithelium: implications for the aetiology and behaviour of cervical neoplasia.&quot;                                   
 ## [6] &quot;Final efficacy, immunogenicity, and safety analyses of a nine-valent human papillomavirus vaccine in women aged 16-26 years: a randomised, double-blind trial.&quot;</code></pre>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="pca.html#cb46-1" aria-hidden="true"></a><span class="kw">head</span>(data_ordered[[<span class="st">&quot;title&quot;</span>]][data_ordered[[<span class="st">&quot;group_fit&quot;</span>]] <span class="op">==</span><span class="st"> </span><span class="dv">2</span>])</span></code></pre></div>
+<pre><code>## [1] &quot;Analysis of the Financial Impact of the 2018 ASTRO Breast Dose-Fractionation Guidelines on Radiation Oncology Departmental Reimbursement.&quot;                   
+## [2] &quot;Patterns of breast recurrence in a pilot study of brachytherapy confined to the lumpectomy site for early breast cancer with six years&#39; minimum follow-up.&quot;  
+## [3] &quot;Long-term radiation complications following conservative surgery (CS) and radiation therapy (RT) in patients with early stage breast cancer.&quot;                
+## [4] &quot;Treatment-related toxicity from a randomized trial of the sequencing of doxorubicin and radiation therapy in patients treated for early stage breast cancer.&quot;
+## [5] &quot;Local recurrence and survival for the german centers in the targit-a (targeted intraoperative radiation therapy-alone) trial.&quot;                               
+## [6] &quot;Sphere of Equivalence-A Novel Target Volume Concept for Intraoperative Radiotherapy Using Low-Energy X Rays.&quot;</code></pre>
 
 </div>
 </div>

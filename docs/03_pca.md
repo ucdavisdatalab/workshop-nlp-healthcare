@@ -156,12 +156,12 @@ head(data_ordered[["title"]][data_ordered[["group_fit"]] == 1])
 ```
 
 ```
-## [1] "Analysis of the Financial Impact of the 2018 ASTRO Breast Dose-Fractionation Guidelines on Radiation Oncology Departmental Reimbursement."                   
-## [2] "Patterns of breast recurrence in a pilot study of brachytherapy confined to the lumpectomy site for early breast cancer with six years' minimum follow-up."  
-## [3] "Long-term radiation complications following conservative surgery (CS) and radiation therapy (RT) in patients with early stage breast cancer."                
-## [4] "Treatment-related toxicity from a randomized trial of the sequencing of doxorubicin and radiation therapy in patients treated for early stage breast cancer."
-## [5] "Local recurrence and survival for the german centers in the targit-a (targeted intraoperative radiation therapy-alone) trial."                               
-## [6] "Sphere of Equivalence-A Novel Target Volume Concept for Intraoperative Radiotherapy Using Low-Energy X Rays."
+## [1] "Screening for wart virus infection in normal and abnormal cervices by DNA hybridisation of cervical scrapes."                                                  
+## [2] "Viral load of human papillomavirus and risk of CIN3 or cervical cancer."                                                                                       
+## [3] "Progressive potential of mild cervical atypia: prospective cytological, colposcopic, and virological study."                                                   
+## [4] "Relation between human papillomavirus type 16 and potential for progression of minor-grade cervical disease."                                                  
+## [5] "HPV 16 DNA in normal and malignant cervical epithelium: implications for the aetiology and behaviour of cervical neoplasia."                                   
+## [6] "Final efficacy, immunogenicity, and safety analyses of a nine-valent human papillomavirus vaccine in women aged 16-26 years: a randomised, double-blind trial."
 ```
 
 ```r
@@ -169,10 +169,10 @@ head(data_ordered[["title"]][data_ordered[["group_fit"]] == 2])
 ```
 
 ```
-## [1] "Screening for wart virus infection in normal and abnormal cervices by DNA hybridisation of cervical scrapes."                                                  
-## [2] "Viral load of human papillomavirus and risk of CIN3 or cervical cancer."                                                                                       
-## [3] "Progressive potential of mild cervical atypia: prospective cytological, colposcopic, and virological study."                                                   
-## [4] "Relation between human papillomavirus type 16 and potential for progression of minor-grade cervical disease."                                                  
-## [5] "HPV 16 DNA in normal and malignant cervical epithelium: implications for the aetiology and behaviour of cervical neoplasia."                                   
-## [6] "Final efficacy, immunogenicity, and safety analyses of a nine-valent human papillomavirus vaccine in women aged 16-26 years: a randomised, double-blind trial."
+## [1] "Analysis of the Financial Impact of the 2018 ASTRO Breast Dose-Fractionation Guidelines on Radiation Oncology Departmental Reimbursement."                   
+## [2] "Patterns of breast recurrence in a pilot study of brachytherapy confined to the lumpectomy site for early breast cancer with six years' minimum follow-up."  
+## [3] "Long-term radiation complications following conservative surgery (CS) and radiation therapy (RT) in patients with early stage breast cancer."                
+## [4] "Treatment-related toxicity from a randomized trial of the sequencing of doxorubicin and radiation therapy in patients treated for early stage breast cancer."
+## [5] "Local recurrence and survival for the german centers in the targit-a (targeted intraoperative radiation therapy-alone) trial."                               
+## [6] "Sphere of Equivalence-A Novel Target Volume Concept for Intraoperative Radiotherapy Using Low-Energy X Rays."
 ```

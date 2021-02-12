@@ -53,13 +53,11 @@ NLP allows us to use "distance reading" to unlock information from narrative tex
 
 ## NLP Trends
 
-- 1950s  Alan Turing's article on "Computing Machinery and Intelligence"
-- 1960s  Restricted vocabularies
-- 1970s  Conceptual ontologies and chatterbots
-- 1980s  First statistical machine translation systems developed (IBM, Watson)
-- 2010s  Extensions of classical NLP and emergence of deep neural networks
+- 1950s - 1970s Using our understanding of language to develop rules that we feed into computer programs.
+- 1980s - 2000s Classical NLP - Using statistical methods to analyze text corpora.
+- 2010s - Further extension of statistical analysis of corpora and developments in deep learning. More and more data available, untagged. Need for unsupervised methods.
 
-In this workshop we're focusing on classical NLP (feature engineering). 
+In this workshop we're focusing on classical NLP (no deep learning).
 
 ## Caveats before we get started
 
@@ -75,7 +73,6 @@ NLP models are powerful, but can fail when applied to jargon-heavy, niched domai
 * [DataLab's NLP Researcher Toolkit](http://datalab.ucdavis.edu/research-toolkit/)
 * [Curated list of ML and NLP resources for healthcare](https://github.com/isaacmg/healthcare_ml)
 * [Post on how NLP can help clinicians](https://tdan.com/natural-language-processing-in-healthcare/24538)
-* [Machine Learning for Healthcare August 2020 Conference at Duke](https://www.mlforhc.org/)
 
 Useful packages:
 
