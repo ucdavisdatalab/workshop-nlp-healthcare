@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>NLP for Healthcare</title>
-  <meta name="description" content="NLP for Healthcare" />
+  <title>2 Intro to Text Processing and NLP for Health Data | NLP for Healthcare</title>
+  <meta name="description" content="2 Intro to Text Processing and NLP for Health Data | NLP for Healthcare" />
   <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="NLP for Healthcare" />
+  <meta property="og:title" content="2 Intro to Text Processing and NLP for Health Data | NLP for Healthcare" />
   <meta property="og:type" content="book" />
   <meta property="og:url" content="https://ucdavisdatalab.github.io/workshop-nlp-healthcare" />
   
@@ -16,7 +16,7 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="NLP for Healthcare" />
+  <meta name="twitter:title" content="2 Intro to Text Processing and NLP for Health Data | NLP for Healthcare" />
   
   
   
@@ -33,8 +33,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-
-<link rel="next" href="intro-to-text-processing-and-nlp-for-health-data.html"/>
+<link rel="prev" href="index.html"/>
+<link rel="next" href="working-with-text-data-in-r.html"/>
 <script src="libs/header-attrs-2.5/header-attrs.js"></script>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -200,60 +200,108 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="header">
-<h1 class="title">NLP for Healthcare</h1>
-<p class="author"><em>Dr. Pamela Reynolds</em></p>
-<p class="author"><em>Dr. Wesley Brooks</em></p>
-<p class="author"><em>Arthur Koehl</em></p>
-<p class="date"><em>2021-02-11</em></p>
-</div>
-<div id="overview" class="section level1" number="1">
-<h1><span class="header-section-number">1</span> Overview</h1>
-<p>link to lesson plan: <a href="https://ucdavisdatalab.github.io/workshop-nlp-healthcare/">https://ucdavisdatalab.github.io/workshop-nlp-healthcare/</a><br />
-link to github repo: <a href="https://github.com/ucdavisdatalab/workshop-nlp-healthcare">https://github.com/ucdavisdatalab/workshop-nlp-healthcare</a><br />
-link to data used: <a href="https://ucdavisdatalab.github.io/workshop-nlp-healthcare/abstracts.csv">abstracts.csv</a></p>
-<p>If you will be coding along please check that you have R and RStudio installed on your machine.</p>
-<div id="objectives-for-this-workshop" class="section level2" number="1.1">
-<h2><span class="header-section-number">1.1</span> Objectives for this Workshop</h2>
-<ol style="list-style-type: decimal">
-<li>Explain natural language processing in lay terms</li>
-<li>Give examples of NLP applications for research</li>
-<li>Evaluate particular challenges posed by working with health data</li>
-<li>Describe key text mining and NLP metrics for assessing word importance and document similarity
+<div id="intro-to-text-processing-and-nlp-for-health-data" class="section level1" number="2">
+<h1><span class="header-section-number">2</span> Intro to Text Processing and NLP for Health Data</h1>
+<p>There is <em>a lot</em> of health data that is unstructured text.</p>
 <ul>
-<li>Install the ‘tm’ package in R</li>
-<li>Create a corpus and DocumentTermMatrix</li>
-<li>Calculate word frequencies</li>
-<li>Calculate TF-IDF weighting</li>
-<li>Generate PCA for exploring document similarities</li>
-</ul></li>
-<li>identify where to go to learn more!</li>
-</ol>
+<li>EMR Clinical notes</li>
+<li>Medical journal literature</li>
+<li>Surveys and questionnaires</li>
+<li>Interviews</li>
+<li>Community forums</li>
+<li>Social media</li>
+</ul>
+<p>The goal is to take text data -&gt; convert it into data that can be analyzed (numbers) -&gt; run some analysis -&gt; interpret the analysis.</p>
+<div id="general-methods-for-analyzing-text" class="section level2" number="2.1">
+<h2><span class="header-section-number">2.1</span> General Methods for Analyzing Text</h2>
+<ul>
+<li><em>word frequency</em></li>
+<li><em>TF-IDF</em></li>
+<li><em>PCA</em></li>
+<li>tokenization</li>
+<li>KWIC: Key Word in Context</li>
+<li>co-occurence</li>
+<li>stemming</li>
+<li>lemmatization - removing inflectional endings to return the base dictionary form of a word (lemma).</li>
+<li>bigrams: conditional probability of a token given the preceding token.</li>
+<li>named entity recognition (NER): identifying which items in the text map to proper names (people, places, location).</li>
+<li>regular expressions (RegEx): searching for exact words, parts of words or phrases</li>
+<li>feature based linear classifiers</li>
+<li>topic modeling</li>
+<li>word embedding: mapping words or phrases to vectors of real numbers allowing words with similar meaning to have a similar representation.</li>
+<li>sentiment analysis: subjective information to determine “polarity” of a document. (e.g., positive or negative reviews)</li>
+<li>part of speech tagging: determining the parts of speech for each word in a sentence.</li>
+</ul>
 </div>
-<div id="demo-introduction" class="section level2" number="1.2">
-<h2><span class="header-section-number">1.2</span> Demo introduction</h2>
-<p>Dr. Sonja Diertrich is a radiation oncologist at UCDMC studying early stage breast cancer. For this coding demo we are using NLP to explore the recent literature on this topic with her lab.</p>
-<div id="about-the-data" class="section level3" number="1.2.1">
-<h3><span class="header-section-number">1.2.1</span> About the data</h3>
-<p>Working with Blaisdell Medical Library’s health librarian Amy Studer, we conducted a pilot systematic search in EMBASE and PubMed on this topic for articles published in the International Journal of Radiation Oncology Biology Physics, Practical Radiation Oncology, and Lancet over the past 5 years. For this demo we are using the titles and abstracts from that search. (See the readME for more information regarding the search strategy used to generate our datatset.)</p>
+<div id="nlp" class="section level2" number="2.2">
+<h2><span class="header-section-number">2.2</span> NLP</h2>
+<p>NLP allows us to use “distance reading” to unlock information from narrative text for extraction and classification:</p>
+<ul>
+<li>keyword detection</li>
+<li>topic detection</li>
+<li>document summarizing</li>
+<li>document classification</li>
+<li>document clustering</li>
+<li>document similarity</li>
+<li>speech recognition</li>
+<li>text translation</li>
+</ul>
+<p><em>Natural Language Processing</em> (NLP) = linguistics + computer science + information engineering + data science. We use NLP to computationally parse and analyze large amounts of natural language data.</p>
 </div>
-<div id="why-r-what-is-rstudio" class="section level3" number="1.2.2">
-<h3><span class="header-section-number">1.2.2</span> Why R? What is RStudio?</h3>
-<p><a href="https://www.r-project.org/">“R”</a> is a programming language and statistical software that interprets scripts. <a href="https://rstudio.com/">RStudio</a> is an Integrated Development Environment (IDE) for working with R. You need R installed in order to use RStudio, but you don’t need RStudio to work with R.</p>
-<p><em>So why R?</em>
-* Faciliates reproducible research workflows
-- integrates with other tools.
-- designed for data analysis
-- produces high-quality graphics
-* It’s extensible and interdisciplinary
-- free, open-source, well-documented, and cross-platform
-- runs on Mac, PC and Linux.
-- works with data of all shapes and sizes.
-- large library of external packages available for performing diverse tasks, including text mining and NLP.
-* Large (and growing) community</p>
-<p><em>Should you use R?</em> Maybe. Use whatever langauge allows you to perform your work and faciliates sharing with your direct colleagues and the broader reserach community.</p>
+<div id="whats-a-natural-language" class="section level2" number="2.3">
+<h2><span class="header-section-number">2.3</span> What’s a Natural Language?</h2>
+<p>“…any language that has evolved naturally in humans through use and repetition without conscious planning or premeditation. Natural languages can take different forms, such as speech or signing. They are distinguished from constructed and formal languages such as those used to program computers or to study logic.” <a href="https://en.wikipedia.org/wiki/Natural_language">Thanks, Wikipedia.</a></p>
+<p><strong>Thought questions:</strong> Are clinical notes a natural language? What about tweets?</p>
+</div>
+<div id="nlp-trends" class="section level2" number="2.4">
+<h2><span class="header-section-number">2.4</span> NLP Trends</h2>
+<ul>
+<li>1950s Alan Turing’s article on “Computing Machinery and Intelligence”</li>
+<li>1960s Restricted vocabularies</li>
+<li>1970s Conceptual ontologies and chatterbots</li>
+<li>1980s First statistical machine translation systems developed (IBM, Watson)</li>
+<li>2010s Extensions of classical NLP and emergence of deep neural networks</li>
+</ul>
+<p>In this workshop we’re focusing on classical NLP (feature engineering).</p>
+</div>
+<div id="caveats-before-we-get-started" class="section level2" number="2.5">
+<h2><span class="header-section-number">2.5</span> Caveats before we get started</h2>
+<p><strong>Garbage in, garbage out.</strong> Know your corpus.
+<strong>All models are wrong, but some are useful.</strong> And others are dangerous.</p>
+<p><em>Natural langauge data can not be deidentified.</em></p>
+<p>NLP models are powerful, but can fail when applied to jargon-heavy, niched domains. Augmenting with developed medical dictionaries helps, but parts of speech taggers, for example, are not designed for the health space. This is especially true for classical NLP techniques, although deep learning approaches hold strong promise for working with unstructured health data.</p>
+</div>
+<div id="further-resources" class="section level2" number="2.6">
+<h2><span class="header-section-number">2.6</span> Further resources</h2>
+<ul>
+<li><a href="http://datalab.ucdavis.edu/research-toolkit/">DataLab’s NLP Researcher Toolkit</a></li>
+<li><a href="https://github.com/isaacmg/healthcare_ml">Curated list of ML and NLP resources for healthcare</a></li>
+<li><a href="https://tdan.com/natural-language-processing-in-healthcare/24538">Post on how NLP can help clinicians</a></li>
+<li><a href="https://www.mlforhc.org/">Machine Learning for Healthcare August 2020 Conference at Duke</a></li>
+</ul>
+<p>Useful packages:</p>
+<ul>
+<li>ntlk (python)<br />
+</li>
+<li>spaCy (python)<br />
+</li>
+<li>quanteda (R)<br />
+</li>
+<li>tidytext (R)</li>
+</ul>
+<p>Classes:</p>
+<ul>
+<li><a href="https://www.youtube.com/playlist?list=PLoROMvodv4rOFZnDyrlW3-nI7tMLtmiJZ&amp;disable_polymer=true">Dan Jurafsky and Christopher Manning NLP youtube series</a><br />
+</li>
+<li><a href="https://web.stanford.edu/class/cs124/lec/textprocessingboth.pdf">CS 124 Slides on Text Processing</a></li>
+</ul>
+<p>Datasets:</p>
+<ul>
+<li><a href="https://github.com/niderhoff/nlp-datasets">https://github.com/niderhoff/nlp-datasets</a><br />
+</li>
+<li><a href="https://archive.ics.uci.edu/ml/datasets.php?format=&amp;task=&amp;att=&amp;area=&amp;numAtt=&amp;numIns=&amp;type=text&amp;sort=nameUp&amp;view=table">https://archive.ics.uci.edu/ml/datasets.php?format=&amp;task=&amp;att=&amp;area=&amp;numAtt=&amp;numIns=&amp;type=text&amp;sort=nameUp&amp;view=table</a></li>
+</ul>
 
-</div>
 </div>
 </div>
             </section>
@@ -261,8 +309,8 @@ link to data used: <a href="https://ucdavisdatalab.github.io/workshop-nlp-health
           </div>
         </div>
       </div>
-
-<a href="intro-to-text-processing-and-nlp-for-health-data.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="working-with-text-data-in-r.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -284,7 +332,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/ucdavisdatalab/workshop-nlp-healthcare/edit/main/index.Rmd",
+"link": "https://github.com/ucdavisdatalab/workshop-nlp-healthcare/edit/main/01_intro.Rmd",
 "text": "Edit"
 },
 "history": {
@@ -292,7 +340,7 @@ gitbook.start({
 "text": null
 },
 "view": {
-"link": "https://github.com/ucdavisdatalab/workshop-nlp-healthcare/blob/main/index.Rmd",
+"link": "https://github.com/ucdavisdatalab/workshop-nlp-healthcare/blob/main/01_intro.Rmd",
 "text": null
 },
 "download": null,

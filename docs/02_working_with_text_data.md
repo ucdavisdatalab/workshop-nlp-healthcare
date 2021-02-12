@@ -1,6 +1,8 @@
 # Working with Text Data in R
 
-### packages needed for workshop
+## Setup
+
+### Packages
 
 In R, and most programming languages, there are many packages - code written by other people to help with certain tasks. 
 For this workshop we will be using two packages - 'tm' and 'ggplot2'.
@@ -30,7 +32,7 @@ Within R/RStudio you can browse function documentation with the following syntax
 ?TermDocumentMatrix
 ```
 
-###  data for this workshop
+###  Data for this workshop
 
 For this workshop, we are looking at a set of abstracts of medical journal articles related to breast cancer.
 We have 714 abstracts, stored in a csv, with duplicates. 
