@@ -15,6 +15,7 @@ Run this command if you don't already have these packages installed.
 install.packages('tm')
 install.packages('ggplot2')
 install.packages('Matrix')
+install.packages('readr')
 ```
 
 Once the packages are installed, load them into your R environment.
@@ -22,6 +23,7 @@ Once the packages are installed, load them into your R environment.
 library('tm')
 library('ggplot2')
 library('Matrix')
+library('readr')
 ```
 
 You can find the documentation for the package [online](https://cran.r-project.org/web/packages/tm/tm.pdf)\
@@ -38,7 +40,7 @@ We would like to get the key words from each abstract, as well as visualize / ch
 
 
 ```{r}
-data <- read.csv(url("https://ucdavisdatalab.github.io/workshop-nlp-healthcare/abstracts.csv"), stringsAsFactors=FALSE)
+data <- read_csv(url("https://ucdavisdatalab.github.io/workshop-nlp-healthcare/abstracts.csv"))
 ```
 
 ```{r}

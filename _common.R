@@ -3,8 +3,9 @@ library(knitr)
 library(tm)
 library(ggplot2)
 library(Matrix)
+library(readr)
 
-data = read.csv(url("https://ucdavisdatalab.github.io/workshop-nlp-healthcare/abstracts.csv"), encoding="UTF-8", stringsAsFactors=FALSE)
+data = read_csv(url("https://ucdavisdatalab.github.io/workshop-nlp-healthcare/abstracts.csv"))
 tfidf_dtm = readRDS("./data/tfidf_dtm.rds")
 
 get_corpus <- function(data, remove=c("")) {

@@ -26,7 +26,7 @@
 <meta name="author" content="Arthur Koehl" />
 
 
-<meta name="date" content="2021-02-12" />
+<meta name="date" content="2021-02-26" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -35,7 +35,7 @@
   
 <link rel="prev" href="working-with-text-data-in-r.html"/>
 
-<script src="libs/header-attrs-2.6/header-attrs.js"></script>
+<script src="libs/header-attrs-2.5/header-attrs.js"></script>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -53,6 +53,8 @@
 
 
 
+<link href="libs/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0/anchor-sections.js"></script>
 
 
 <style type="text/css">
@@ -217,54 +219,54 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="check-the-tf-idf-matrix" class="section level3" number="4.1.1">
 <h3><span class="header-section-number">4.1.1</span> Check the TF-IDF matrix</h3>
 <p>Not only are there too many columns to work through individually, but also each column is mostly zeroes. As a result an individual column of the TF-IDF matrix doesn’t contain much information. This makes sense if you consider consider how much you would learn about books published in 2020 by counting the number of times each one used ther word “whale”. Here’s an example.</p>
-<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="exploratory-data-analysis.html#cb28-1" aria-hidden="true"></a><span class="co"># first, convert the TF-IDF to a dense matrix</span></span>
-<span id="cb28-2"><a href="exploratory-data-analysis.html#cb28-2" aria-hidden="true"></a>tfmat =<span class="st"> </span><span class="kw">as.matrix</span>( tfidf_dtm )</span>
-<span id="cb28-3"><a href="exploratory-data-analysis.html#cb28-3" aria-hidden="true"></a></span>
-<span id="cb28-4"><a href="exploratory-data-analysis.html#cb28-4" aria-hidden="true"></a><span class="co"># identify the first term and plot its histogram</span></span>
-<span id="cb28-5"><a href="exploratory-data-analysis.html#cb28-5" aria-hidden="true"></a><span class="kw">hist</span>( tfmat[, <span class="dv">1</span>], <span class="dt">main=</span><span class="kw">paste0</span>( <span class="st">&#39;uses of &quot;&#39;</span>, <span class="kw">colnames</span>( tfmat )[[<span class="dv">1</span>]], <span class="st">&#39;&quot;&#39;</span> ))</span></code></pre></div>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="exploratory-data-analysis.html#cb29-1" aria-hidden="true"></a><span class="co"># first, convert the TF-IDF to a dense matrix</span></span>
+<span id="cb29-2"><a href="exploratory-data-analysis.html#cb29-2" aria-hidden="true"></a>tfmat =<span class="st"> </span><span class="kw">as.matrix</span>( tfidf_dtm )</span>
+<span id="cb29-3"><a href="exploratory-data-analysis.html#cb29-3" aria-hidden="true"></a></span>
+<span id="cb29-4"><a href="exploratory-data-analysis.html#cb29-4" aria-hidden="true"></a><span class="co"># identify the first term and plot its histogram</span></span>
+<span id="cb29-5"><a href="exploratory-data-analysis.html#cb29-5" aria-hidden="true"></a><span class="kw">hist</span>( tfmat[, <span class="dv">1</span>], <span class="dt">main=</span><span class="kw">paste0</span>( <span class="st">&#39;uses of &quot;&#39;</span>, <span class="kw">colnames</span>( tfmat )[[<span class="dv">1</span>]], <span class="st">&#39;&quot;&#39;</span> ))</span></code></pre></div>
 <p><img src="03_pca_files/figure-html/plot-tfidf-1.png" width="672" /></p>
-<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="exploratory-data-analysis.html#cb29-1" aria-hidden="true"></a><span class="co"># identify the second term and plot its histgram</span></span>
-<span id="cb29-2"><a href="exploratory-data-analysis.html#cb29-2" aria-hidden="true"></a><span class="kw">hist</span>( tfmat[, <span class="dv">2</span>], <span class="dt">main=</span><span class="kw">paste0</span>( <span class="st">&#39;uses of &quot;&#39;</span>, <span class="kw">colnames</span>( tfmat )[[<span class="dv">2</span>]], <span class="st">&#39;&quot;&#39;</span> ))</span></code></pre></div>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="exploratory-data-analysis.html#cb30-1" aria-hidden="true"></a><span class="co"># identify the second term and plot its histgram</span></span>
+<span id="cb30-2"><a href="exploratory-data-analysis.html#cb30-2" aria-hidden="true"></a><span class="kw">hist</span>( tfmat[, <span class="dv">2</span>], <span class="dt">main=</span><span class="kw">paste0</span>( <span class="st">&#39;uses of &quot;&#39;</span>, <span class="kw">colnames</span>( tfmat )[[<span class="dv">2</span>]], <span class="st">&#39;&quot;&#39;</span> ))</span></code></pre></div>
 <p><img src="03_pca_files/figure-html/plot-tfidf-2.png" width="672" /></p>
-<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="exploratory-data-analysis.html#cb30-1" aria-hidden="true"></a><span class="co"># plot the first two columns </span></span>
-<span id="cb30-2"><a href="exploratory-data-analysis.html#cb30-2" aria-hidden="true"></a><span class="kw">plot</span>( <span class="kw">as.matrix</span>(tfidf_dtm[, <span class="dv">1</span><span class="op">:</span><span class="dv">2</span>]), <span class="dt">bty=</span><span class="st">&#39;n&#39;</span>, <span class="dt">main=</span><span class="kw">paste0</span>( <span class="st">&#39;joint uses of &quot;&#39;</span>,</span>
-<span id="cb30-3"><a href="exploratory-data-analysis.html#cb30-3" aria-hidden="true"></a>  <span class="kw">colnames</span>( tfmat )[[<span class="dv">1</span>]], <span class="st">&#39;&quot; and &quot;&#39;</span>, <span class="kw">colnames</span>( tfmat )[[<span class="dv">2</span>]], <span class="st">&#39;&quot;&#39;</span>) )</span></code></pre></div>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="exploratory-data-analysis.html#cb31-1" aria-hidden="true"></a><span class="co"># plot the first two columns </span></span>
+<span id="cb31-2"><a href="exploratory-data-analysis.html#cb31-2" aria-hidden="true"></a><span class="kw">plot</span>( <span class="kw">as.matrix</span>(tfidf_dtm[, <span class="dv">1</span><span class="op">:</span><span class="dv">2</span>]), <span class="dt">bty=</span><span class="st">&#39;n&#39;</span>, <span class="dt">main=</span><span class="kw">paste0</span>( <span class="st">&#39;joint uses of &quot;&#39;</span>,</span>
+<span id="cb31-3"><a href="exploratory-data-analysis.html#cb31-3" aria-hidden="true"></a>  <span class="kw">colnames</span>( tfmat )[[<span class="dv">1</span>]], <span class="st">&#39;&quot; and &quot;&#39;</span>, <span class="kw">colnames</span>( tfmat )[[<span class="dv">2</span>]], <span class="st">&#39;&quot;&#39;</span>) )</span></code></pre></div>
 <p><img src="03_pca_files/figure-html/plot-tfidf-3.png" width="672" /></p>
 </div>
 <div id="compute-pca" class="section level3" number="4.1.2">
 <h3><span class="header-section-number">4.1.2</span> Compute PCA</h3>
 <p>Since the individual columns don’t convey much information, PCA rotates the big matrix until we are “looking” down the “direction” (or component) with the most variability. The result is another matrix of equal size to the first, but each column contains information from all of the columns of the original matrix, and they are sorted so that the columns with the most variability are first. This will take your computer several seconds to calculate.</p>
-<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="exploratory-data-analysis.html#cb31-1" aria-hidden="true"></a><span class="co"># rotate the TF-IDF so the columns are articles</span></span>
-<span id="cb31-2"><a href="exploratory-data-analysis.html#cb31-2" aria-hidden="true"></a>articles =<span class="st"> </span><span class="kw">t</span>( tfmat )</span>
-<span id="cb31-3"><a href="exploratory-data-analysis.html#cb31-3" aria-hidden="true"></a></span>
-<span id="cb31-4"><a href="exploratory-data-analysis.html#cb31-4" aria-hidden="true"></a><span class="co"># calculate PCA on the rotated TF-IDF</span></span>
-<span id="cb31-5"><a href="exploratory-data-analysis.html#cb31-5" aria-hidden="true"></a>pca =<span class="st"> </span><span class="kw">prcomp</span>(articles, <span class="dt">center=</span><span class="ot">TRUE</span>, <span class="dt">scale=</span><span class="ot">TRUE</span>)</span>
-<span id="cb31-6"><a href="exploratory-data-analysis.html#cb31-6" aria-hidden="true"></a></span>
-<span id="cb31-7"><a href="exploratory-data-analysis.html#cb31-7" aria-hidden="true"></a><span class="co"># extract the matrix of rotations</span></span>
-<span id="cb31-8"><a href="exploratory-data-analysis.html#cb31-8" aria-hidden="true"></a>pcmat =<span class="st"> </span><span class="kw">as.data.frame</span>( pca<span class="op">$</span>rotation )</span></code></pre></div>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="exploratory-data-analysis.html#cb32-1" aria-hidden="true"></a><span class="co"># rotate the TF-IDF so the columns are articles</span></span>
+<span id="cb32-2"><a href="exploratory-data-analysis.html#cb32-2" aria-hidden="true"></a>articles =<span class="st"> </span><span class="kw">t</span>( tfmat )</span>
+<span id="cb32-3"><a href="exploratory-data-analysis.html#cb32-3" aria-hidden="true"></a></span>
+<span id="cb32-4"><a href="exploratory-data-analysis.html#cb32-4" aria-hidden="true"></a><span class="co"># calculate PCA on the rotated TF-IDF</span></span>
+<span id="cb32-5"><a href="exploratory-data-analysis.html#cb32-5" aria-hidden="true"></a>pca =<span class="st"> </span><span class="kw">prcomp</span>(articles, <span class="dt">center=</span><span class="ot">TRUE</span>, <span class="dt">scale=</span><span class="ot">TRUE</span>)</span>
+<span id="cb32-6"><a href="exploratory-data-analysis.html#cb32-6" aria-hidden="true"></a></span>
+<span id="cb32-7"><a href="exploratory-data-analysis.html#cb32-7" aria-hidden="true"></a><span class="co"># extract the matrix of rotations</span></span>
+<span id="cb32-8"><a href="exploratory-data-analysis.html#cb32-8" aria-hidden="true"></a>pcmat =<span class="st"> </span><span class="kw">as.data.frame</span>( pca<span class="op">$</span>rotation )</span></code></pre></div>
 </div>
 <div id="plot-the-abstracts" class="section level3" number="4.1.3">
 <h3><span class="header-section-number">4.1.3</span> Plot the abstracts</h3>
 <p>We can now look at a plot of the first two principal components to see how it contains more information than the first columns of the TF-IDF matrix.</p>
-<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="exploratory-data-analysis.html#cb32-1" aria-hidden="true"></a><span class="co"># plot the first two principal components</span></span>
-<span id="cb32-2"><a href="exploratory-data-analysis.html#cb32-2" aria-hidden="true"></a><span class="kw">with</span>( pcmat, <span class="kw">plot</span>(PC1, PC2) )</span></code></pre></div>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="exploratory-data-analysis.html#cb33-1" aria-hidden="true"></a><span class="co"># plot the first two principal components</span></span>
+<span id="cb33-2"><a href="exploratory-data-analysis.html#cb33-2" aria-hidden="true"></a><span class="kw">with</span>( pcmat, <span class="kw">plot</span>(PC1, PC2) )</span></code></pre></div>
 <p><img src="03_pca_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
 <p>Unlike the TF-IDF, the x and y axes here have no inherent meaning, but they are aligned with the greatest variability in the data. So by inspecting the articles that are at the extremes, we can begin to understand the strongest signals that PCA detected in the articles.</p>
 </div>
 <div id="examine-how-principal-components-sort-the-documents" class="section level3" number="4.1.4">
 <h3><span class="header-section-number">4.1.4</span> Examine how principal components sort the documents</h3>
-<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="exploratory-data-analysis.html#cb33-1" aria-hidden="true"></a><span class="co"># identify the order of documents along the first principal component</span></span>
-<span id="cb33-2"><a href="exploratory-data-analysis.html#cb33-2" aria-hidden="true"></a>indx &lt;-<span class="st"> </span><span class="kw">order</span>( pcmat<span class="op">$</span>PC1 )</span>
-<span id="cb33-3"><a href="exploratory-data-analysis.html#cb33-3" aria-hidden="true"></a></span>
-<span id="cb33-4"><a href="exploratory-data-analysis.html#cb33-4" aria-hidden="true"></a><span class="co"># view the titles at the extremes of the first principal component</span></span>
-<span id="cb33-5"><a href="exploratory-data-analysis.html#cb33-5" aria-hidden="true"></a>data<span class="op">$</span>title[ <span class="kw">head</span>(indx) ]</span></code></pre></div>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="exploratory-data-analysis.html#cb34-1" aria-hidden="true"></a><span class="co"># identify the order of documents along the first principal component</span></span>
+<span id="cb34-2"><a href="exploratory-data-analysis.html#cb34-2" aria-hidden="true"></a>indx &lt;-<span class="st"> </span><span class="kw">order</span>( pcmat<span class="op">$</span>PC1 )</span>
+<span id="cb34-3"><a href="exploratory-data-analysis.html#cb34-3" aria-hidden="true"></a></span>
+<span id="cb34-4"><a href="exploratory-data-analysis.html#cb34-4" aria-hidden="true"></a><span class="co"># view the titles at the extremes of the first principal component</span></span>
+<span id="cb34-5"><a href="exploratory-data-analysis.html#cb34-5" aria-hidden="true"></a>data<span class="op">$</span>title[ <span class="kw">head</span>(indx) ]</span></code></pre></div>
 <pre><code>## [1] &quot;Signal transduction pathways regulated by CSF-1 receptors modulate the in vitro radiosensitivity of mammary epithelial cells.&quot;                                                                                                                           
 ## [2] &quot;Creation of an episode-based payment model for prostate and breast cancer radiation therapy.&quot;                                                                                                                                                            
 ## [3] &quot;Erratum to: Wang SY, Kelly G, Gross C, et al. Information needs of older women with early-stage breast cancer when making radiation therapy decisions. [Int J Radiat Oncol Biol Phys 2017;98:733-740](S0360301617303097)(10.1016/j.ijrobp.2017.02.001)).&quot;
 ## [4] &quot;Molecular radiation therapy in experimental model of advanced prostate cancer using internalizable monoclonal antibody.&quot;                                                                                                                                 
 ## [5] &quot;Dna double-strand break repair and induction of apoptosis in relation to late normal tissue responses following radiation therapy for early breast cancer.&quot;                                                                                              
 ## [6] &quot;Patient experience survey of early-stage breast cancer patients undergoing whole-breast radiation therapy.&quot;</code></pre>
-<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="exploratory-data-analysis.html#cb35-1" aria-hidden="true"></a>data<span class="op">$</span>title[ <span class="kw">tail</span>(indx) ]</span></code></pre></div>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="exploratory-data-analysis.html#cb36-1" aria-hidden="true"></a>data<span class="op">$</span>title[ <span class="kw">tail</span>(indx) ]</span></code></pre></div>
 <pre><code>## [1] &quot;Phase I/II Study Evaluating Early Tolerance in Breast Cancer Patients Undergoing Accelerated Partial Breast Irradiation Treated With the MammoSite Balloon Breast Brachytherapy Catheter Using a 2-Day Dose Schedule.&quot;                          
 ## [2] &quot;Accelerated partial breast irradiation using sole interstitial multicatheter brachytherapy versus whole breast irradiation for early breast cancer: Five-year results of a randomized phase 3 trial-Part I: Local control and survival results.&quot;
 ## [3] &quot;Accelerated partial-breast irradiation provides equivalent 10-year outcomes to whole breast irradiation: A matched-pair analysis.&quot;                                                                                                              
@@ -272,18 +274,18 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## [5] &quot;Margin status an indication for accelerated partial breast irradiation in early-stage breast cancers.&quot;                                                                                                                                          
 ## [6] &quot;Differences in Patterns of Failure in Patients Treated With Accelerated Partial Breast Irradiation Versus Whole-Breast Irradiation: A Matched-Pair Analysis With 10-Year Follow-Up.&quot;</code></pre>
 <p>It seems that the PCA has detected a pattern in term usage that distinguishes between papers on one extreme that make comparisons between whole- and partial-breast radiation therapy, and papers on the other extreme that are mostly about molecular biology. This is kind of impressive when you consider that the computer did it without any human input about what language might be relevant to medicine or biology. Let’s look at how some other principal components are separating the documents.</p>
-<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="exploratory-data-analysis.html#cb37-1" aria-hidden="true"></a><span class="co"># identify the order of documents along the second principal component</span></span>
-<span id="cb37-2"><a href="exploratory-data-analysis.html#cb37-2" aria-hidden="true"></a>indx =<span class="st"> </span><span class="kw">order</span>( pcmat<span class="op">$</span>PC2 )</span>
-<span id="cb37-3"><a href="exploratory-data-analysis.html#cb37-3" aria-hidden="true"></a></span>
-<span id="cb37-4"><a href="exploratory-data-analysis.html#cb37-4" aria-hidden="true"></a><span class="co"># observe which papers are at the extremes of the second PC</span></span>
-<span id="cb37-5"><a href="exploratory-data-analysis.html#cb37-5" aria-hidden="true"></a>data<span class="op">$</span>title[ <span class="kw">head</span>(indx) ]</span></code></pre></div>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="exploratory-data-analysis.html#cb38-1" aria-hidden="true"></a><span class="co"># identify the order of documents along the second principal component</span></span>
+<span id="cb38-2"><a href="exploratory-data-analysis.html#cb38-2" aria-hidden="true"></a>indx =<span class="st"> </span><span class="kw">order</span>( pcmat<span class="op">$</span>PC2 )</span>
+<span id="cb38-3"><a href="exploratory-data-analysis.html#cb38-3" aria-hidden="true"></a></span>
+<span id="cb38-4"><a href="exploratory-data-analysis.html#cb38-4" aria-hidden="true"></a><span class="co"># observe which papers are at the extremes of the second PC</span></span>
+<span id="cb38-5"><a href="exploratory-data-analysis.html#cb38-5" aria-hidden="true"></a>data<span class="op">$</span>title[ <span class="kw">head</span>(indx) ]</span></code></pre></div>
 <pre><code>## [1] &quot;The influence of young age on outcome in early stage breast cancer.&quot;                                                                                                      
 ## [2] &quot;Locoregional failure in early-stage breast cancer patients treated with breast-conserving therapy: Which patients benefit from supraclavicular nodal irradiation?&quot;        
 ## [3] &quot;Breast conservation treatment of early stage breast cancer: Patterns of failure.&quot;                                                                                         
 ## [4] &quot;Equivalent survival with breast conservation therapy or mastectomy in the management of youngwomen with early-stage breast cancer.&quot;                                       
 ## [5] &quot;Delivering adjuvant radiation therapy beyond 6 months after breast-conserving surgery does not jeopardize the locoregional control in early-stage breast cancer patients.&quot;
 ## [6] &quot;Profile of prognostic factors in 1022 Indian women with early-stage breast cancer treated with breast-conserving therapy.&quot;</code></pre>
-<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="exploratory-data-analysis.html#cb39-1" aria-hidden="true"></a>data<span class="op">$</span>title[ <span class="kw">tail</span>(indx) ]</span></code></pre></div>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="exploratory-data-analysis.html#cb40-1" aria-hidden="true"></a>data<span class="op">$</span>title[ <span class="kw">tail</span>(indx) ]</span></code></pre></div>
 <pre><code>## [1] &quot;Hypofractionated whole breast radiation therapy: Does size matter?&quot;                                                                                                                                    
 ## [2] &quot;Comparison of preoperative partial breast radiosurgery treatment techniques: 3D-CRT, non-coplanar IMRT, coplanar IMRT, and VMAT.&quot;                                                                      
 ## [3] &quot;A dosimetric planning study for hypofractionated whole breast irradiation with concurrent boost (RTOG 1005) for early stage breast cancer.&quot;                                                            
@@ -291,18 +293,18 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## [5] &quot;Ongoing clinical experience utilizing 3D conformal external beam radiotherapy to deliver partial-breast irradiation in patients with early-stage breast cancer treated with breast-conserving therapy.&quot;
 ## [6] &quot;Prone accelerated partial breast irradiation after breast-conserving surgery: Preliminary clinical results and dose-volume histogram analysis.&quot;</code></pre>
 <p>With the second principal component, we see a separation between papers about breast-conserving therapy at one extreme and papers about hypofractionated, conformal, or modulated radiation therapy at the other extreme.</p>
-<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="exploratory-data-analysis.html#cb41-1" aria-hidden="true"></a><span class="co"># identify the order of documents along the third principal component</span></span>
-<span id="cb41-2"><a href="exploratory-data-analysis.html#cb41-2" aria-hidden="true"></a>indx =<span class="st"> </span><span class="kw">order</span>( pcmat<span class="op">$</span>PC3 )</span>
-<span id="cb41-3"><a href="exploratory-data-analysis.html#cb41-3" aria-hidden="true"></a></span>
-<span id="cb41-4"><a href="exploratory-data-analysis.html#cb41-4" aria-hidden="true"></a><span class="co"># observe which papers are at the extremes of the second PC</span></span>
-<span id="cb41-5"><a href="exploratory-data-analysis.html#cb41-5" aria-hidden="true"></a>data<span class="op">$</span>title[ <span class="kw">head</span>(indx) ]</span></code></pre></div>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="exploratory-data-analysis.html#cb42-1" aria-hidden="true"></a><span class="co"># identify the order of documents along the third principal component</span></span>
+<span id="cb42-2"><a href="exploratory-data-analysis.html#cb42-2" aria-hidden="true"></a>indx =<span class="st"> </span><span class="kw">order</span>( pcmat<span class="op">$</span>PC3 )</span>
+<span id="cb42-3"><a href="exploratory-data-analysis.html#cb42-3" aria-hidden="true"></a></span>
+<span id="cb42-4"><a href="exploratory-data-analysis.html#cb42-4" aria-hidden="true"></a><span class="co"># observe which papers are at the extremes of the second PC</span></span>
+<span id="cb42-5"><a href="exploratory-data-analysis.html#cb42-5" aria-hidden="true"></a>data<span class="op">$</span>title[ <span class="kw">head</span>(indx) ]</span></code></pre></div>
 <pre><code>## [1] &quot;External beam radiation therapy versus intraoperative radiation therapy for breast-conserving therapy: A large single-institution matched-pair evaluation.&quot;           
 ## [2] &quot;Early results of a prospective cohort study on intraoperative radiation therapy for early breast cancer at a single institution.&quot;                                     
 ## [3] &quot;Cosmetic outcome and late breast toxicity after intraoperative radiation therapy as a single modality or as a boost using the intrabeam® device: A prospective study.&quot;
 ## [4] &quot;Updated results of a prospective cohort study on intraoperative radiation therapy for early breast cancer at a single-institution.&quot;                                   
 ## [5] &quot;First safety analysis after 80 treated patients with early breast cancer within the targit-e trial.&quot;                                                                  
 ## [6] &quot;A comparison of the early toxicities of balloon catheter high-dose-rate brachytherapy (BCHDRB) and intraoperative radiation therapy.&quot;</code></pre>
-<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="exploratory-data-analysis.html#cb43-1" aria-hidden="true"></a>data<span class="op">$</span>title[ <span class="kw">tail</span>(indx) ]</span></code></pre></div>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="exploratory-data-analysis.html#cb44-1" aria-hidden="true"></a>data<span class="op">$</span>title[ <span class="kw">tail</span>(indx) ]</span></code></pre></div>
 <pre><code>## [1] &quot;Dosimetric comparison of radiotherapy for left sided breast cancer: Breath-hold versus free breathing.&quot;                                                                                                 
 ## [2] &quot;Is there justification for the utilization of IMRT in the treatment of early-stage right breast cancer?&quot;                                                                                                
 ## [3] &quot;Bilateral breast and regional nodal irradiation in early stage breast cancer D a dosimetric comparison of IMRT and 3D conformal radiation therapy.&quot;                                                     
@@ -315,21 +317,21 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h3><span class="header-section-number">4.1.5</span> Interpreting PCA</h3>
 <p>It looks like there are patterns of actual meaning arising from the PCA. We’re not talking here about statistical significance or clinical importance. It is still for humans to decide what patterns have clinical importance. Here, PCA is a shortcut that allows us to identify some patterns in articles about breast cancer radiation therapy without having to read all of the articles. All of the patterns I’ve cited are based on patterns of word usage, and yet it appears that those patterns in word usage actually map onto distinctions with real-world meaning. So keep in mind that the principal components are only identifying patterns in term frequencies but the PCA is useful only when those terms map onto real-world meaning.</p>
 <p>So far, we’ve looked at the most extreme documents along some principal components. If you want to see more than a few documents at a time, or see how documents align jointly on two principal components, then you want to do a scatterplot of the top terms of each document. I’ll show you how, but it uses a function called <code>top_terms()</code> that needs to be loaded from our Github repository (it’s too complex to live-code).</p>
-<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="exploratory-data-analysis.html#cb45-1" aria-hidden="true"></a><span class="co"># load the function for identifying top terms in documents</span></span>
-<span id="cb45-2"><a href="exploratory-data-analysis.html#cb45-2" aria-hidden="true"></a><span class="kw">source</span>(<span class="kw">url</span>(<span class="st">&quot;https://ucdavisdatalab.github.io/workshop-nlp-healthcare/top_terms.R&quot;</span>))</span>
-<span id="cb45-3"><a href="exploratory-data-analysis.html#cb45-3" aria-hidden="true"></a></span>
-<span id="cb45-4"><a href="exploratory-data-analysis.html#cb45-4" aria-hidden="true"></a><span class="co"># cbind data and the PCA rotation</span></span>
-<span id="cb45-5"><a href="exploratory-data-analysis.html#cb45-5" aria-hidden="true"></a>plotdata &lt;-<span class="st"> </span><span class="kw">cbind</span>(data, pcmat)</span>
-<span id="cb45-6"><a href="exploratory-data-analysis.html#cb45-6" aria-hidden="true"></a></span>
-<span id="cb45-7"><a href="exploratory-data-analysis.html#cb45-7" aria-hidden="true"></a><span class="co"># identify top terms for each document and attach them to the plotdata</span></span>
-<span id="cb45-8"><a href="exploratory-data-analysis.html#cb45-8" aria-hidden="true"></a>plotdata[[ <span class="st">&#39;top_terms&#39;</span> ]] &lt;-<span class="st"> </span><span class="kw">top_terms</span>( tfidf_dtm )</span>
-<span id="cb45-9"><a href="exploratory-data-analysis.html#cb45-9" aria-hidden="true"></a></span>
-<span id="cb45-10"><a href="exploratory-data-analysis.html#cb45-10" aria-hidden="true"></a><span class="co"># visualize the top principal components in terms of top terms</span></span>
-<span id="cb45-11"><a href="exploratory-data-analysis.html#cb45-11" aria-hidden="true"></a><span class="kw">ggplot</span>(plotdata) <span class="op">+</span><span class="st"> </span><span class="kw">aes</span>(<span class="dt">x=</span>PC2, <span class="dt">y=</span>PC3, <span class="dt">label=</span>top_terms) <span class="op">+</span><span class="st"> </span><span class="kw">geom_text</span>(<span class="dt">check_overlap=</span><span class="ot">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="exploratory-data-analysis.html#cb46-1" aria-hidden="true"></a><span class="co"># load the function for identifying top terms in documents</span></span>
+<span id="cb46-2"><a href="exploratory-data-analysis.html#cb46-2" aria-hidden="true"></a><span class="kw">source</span>(<span class="kw">url</span>(<span class="st">&quot;https://ucdavisdatalab.github.io/workshop-nlp-healthcare/top_terms.R&quot;</span>))</span>
+<span id="cb46-3"><a href="exploratory-data-analysis.html#cb46-3" aria-hidden="true"></a></span>
+<span id="cb46-4"><a href="exploratory-data-analysis.html#cb46-4" aria-hidden="true"></a><span class="co"># cbind data and the PCA rotation</span></span>
+<span id="cb46-5"><a href="exploratory-data-analysis.html#cb46-5" aria-hidden="true"></a>plotdata &lt;-<span class="st"> </span><span class="kw">cbind</span>(data, pcmat)</span>
+<span id="cb46-6"><a href="exploratory-data-analysis.html#cb46-6" aria-hidden="true"></a></span>
+<span id="cb46-7"><a href="exploratory-data-analysis.html#cb46-7" aria-hidden="true"></a><span class="co"># identify top terms for each document and attach them to the plotdata</span></span>
+<span id="cb46-8"><a href="exploratory-data-analysis.html#cb46-8" aria-hidden="true"></a>plotdata[[ <span class="st">&#39;top_terms&#39;</span> ]] &lt;-<span class="st"> </span><span class="kw">top_terms</span>( tfidf_dtm )</span>
+<span id="cb46-9"><a href="exploratory-data-analysis.html#cb46-9" aria-hidden="true"></a></span>
+<span id="cb46-10"><a href="exploratory-data-analysis.html#cb46-10" aria-hidden="true"></a><span class="co"># visualize the top principal components in terms of top terms</span></span>
+<span id="cb46-11"><a href="exploratory-data-analysis.html#cb46-11" aria-hidden="true"></a><span class="kw">ggplot</span>(plotdata) <span class="op">+</span><span class="st"> </span><span class="kw">aes</span>(<span class="dt">x=</span>PC2, <span class="dt">y=</span>PC3, <span class="dt">label=</span>top_terms) <span class="op">+</span><span class="st"> </span><span class="kw">geom_text</span>(<span class="dt">check_overlap=</span><span class="ot">TRUE</span>)</span></code></pre></div>
 <p><img src="03_pca_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
 <p>We’ve seen the patterns that align with the first, second, and third principal components. What makes these principal components the first, second, and third? The PCs are ranked by the amount of total variance in the TF-IDF matrix that they explain. So the first principal component is aligned with the strongest signal in term frequency, and the second is aligned with the strongest signal that’s left over after accounting for the first component, and so on. The strength of signal is quantified by the proportion of variance in the TF-IDF matrix that is explained by each principal component. In order to see how the strength of signal changes along the sequence of PCs, we can visualize the cumulative percent of variance explained.</p>
-<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="exploratory-data-analysis.html#cb46-1" aria-hidden="true"></a><span class="kw">plot</span>(<span class="dv">100</span> <span class="op">*</span><span class="st"> </span><span class="kw">cumsum</span>(pca<span class="op">$</span>sdev<span class="op">^</span><span class="dv">2</span>) <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(pca<span class="op">$</span>sdev<span class="op">^</span><span class="dv">2</span>), <span class="dt">type=</span><span class="st">&#39;l&#39;</span>, <span class="dt">bty=</span><span class="st">&#39;n&#39;</span>,</span>
-<span id="cb46-2"><a href="exploratory-data-analysis.html#cb46-2" aria-hidden="true"></a>    <span class="dt">ylab=</span><span class="st">&quot;% total variance explained&quot;</span>, <span class="dt">xlab=</span><span class="st">&quot;Number of components&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="exploratory-data-analysis.html#cb47-1" aria-hidden="true"></a><span class="kw">plot</span>(<span class="dv">100</span> <span class="op">*</span><span class="st"> </span><span class="kw">cumsum</span>(pca<span class="op">$</span>sdev<span class="op">^</span><span class="dv">2</span>) <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(pca<span class="op">$</span>sdev<span class="op">^</span><span class="dv">2</span>), <span class="dt">type=</span><span class="st">&#39;l&#39;</span>, <span class="dt">bty=</span><span class="st">&#39;n&#39;</span>,</span>
+<span id="cb47-2"><a href="exploratory-data-analysis.html#cb47-2" aria-hidden="true"></a>    <span class="dt">ylab=</span><span class="st">&quot;% total variance explained&quot;</span>, <span class="dt">xlab=</span><span class="st">&quot;Number of components&quot;</span>)</span></code></pre></div>
 <p><img src="03_pca_files/figure-html/plot-variance-explained-1.png" width="672" /></p>
 
 </div>
